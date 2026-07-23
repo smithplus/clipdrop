@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Project</title>
+    <link rel="canonical" href="https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/project">
+    <meta name="description" content="Overview of Project">
+    <meta property="og:title" content="Project">
+    <meta property="og:description" content="Overview of Project">
+    <meta property="og:url" content="https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/project">
+    <meta property="og:image" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Project">
+    <meta name="twitter:description" content="Overview of Project">
+    <meta name="twitter:image" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="source" content="github">
+    <meta name="pathprefix" content="/premiere-pro/uxp">
+    <meta name="githubblobpath" content="https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/project.md">
+    <meta name="template" content="documentation">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/hlx_statics/scripts/scripts.js" type="module" crossorigin="use-credentials"></script>
+    <link rel="stylesheet" href="/hlx_statics/styles/styles.css">
+    <link rel="icon" href="data:,">
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <h1 id="project">Project</h1>
+        <p>Since: <strong>25.6</strong></p>
+        <h2 id="properties">Properties</h2>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Access</div>
+            <div data-align="left">Min Version</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">guid</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/guid">Guid</a></em></div>
+            <div data-align="left">R</div>
+            <div data-align="left">25.6</div>
+            <div data-align="left">The unique identifier of the project.</div>
+          </div>
+          <div>
+            <div data-align="left">name</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">R</div>
+            <div data-align="left">25.6</div>
+            <div data-align="left">The project name.</div>
+          </div>
+          <div>
+            <div data-align="left">path</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">R</div>
+            <div data-align="left">25.6</div>
+            <div data-align="left">The absolute file path to the project file.</div>
+          </div>
+        </div>
+        <h2 id="static-methods">Static Methods</h2>
+        <h3 id="createproject">createProject</h3>
+        <p>Create a new project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/project">Project</a></em>></p>
+        <h4 id="parameters">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">path</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getactiveproject">getActiveProject</h3>
+        <p>Currently active project.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/project">Project</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getproject">getProject</h3>
+        <p>Get project referenced by given UID</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: <em><a href="/premiere-pro/uxp/ppro-reference/classes/project">Project</a></em></p>
+        <h4 id="parameters-1">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">projectGuid</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/guid">Guid</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="isproject">isProject</h3>
+        <p>Returns true if the file at the given path is openable as a Premiere project</p>
+        <p>Since: <strong>26.2</strong></p>
+        <p>Returns: <em>boolean</em></p>
+        <h4 id="parameters-2">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">projectPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="open">open</h3>
+        <p>Open a project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/project">Project</a></em>></p>
+        <h4 id="parameters-3">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">path</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">openProjectOptions</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/openprojectoptions">OpenProjectOptions</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h2 id="instance-methods">Instance Methods</h2>
+        <h3 id="close">close</h3>
+        <p>Close a project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-4">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">closeProjectOptions</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/closeprojectoptions">CloseProjectOptions</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="closesequence">closeSequence</h3>
+        <p>Close a sequence and return true if successful.</p>
+        <p>Since: <strong>26.2</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-5">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">sequence</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="createsequence">createSequence</h3>
+        <p>Create a new sequence with the default preset path - Parameter presetPath is deprecated, instead use createSequenceWithPresetPath()</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em>></p>
+        <h4 id="parameters-6">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">name</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">presetPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="createsequencefrommedia">createSequenceFromMedia</h3>
+        <p>Create a new sequence with a given name and media</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em>></p>
+        <h4 id="parameters-7">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">name</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">clipProjectItems</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/clipprojectitem">ClipProjectItem[]</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">targetBin</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/projectitem">ProjectItem</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="createsequencewithpresetpath">createSequenceWithPresetPath</h3>
+        <p>Create a new sequence with a preset path</p>
+        <p>Since: <strong>26.3</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em>></p>
+        <h4 id="parameters-8">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">name</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">presetPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="deletesequence">deleteSequence</h3>
+        <p>Delete a given sequence from the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-9">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">sequence</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="executetransaction">executeTransaction</h3>
+        <p>Execute undoable transaction by passing compound action</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: <em>boolean</em></p>
+        <h4 id="parameters-10">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">callback</div>
+            <div data-align="left"><em>(compoundAction: CompoundAction) => void</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">undoString?</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getactivesequence">getActiveSequence</h3>
+        <p>Get the active sequence of the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getcolorsettings">getColorSettings</h3>
+        <p>Get project color settings object</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/projectcolorsettings">ProjectColorSettings</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getinsertionbin">getInsertionBin</h3>
+        <p>Get current insertion bin</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/projectitem">ProjectItem</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getrootitem">getRootItem</h3>
+        <p>The root item of the project which contains all items of the project on the lowest level.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/folderitem">FolderItem</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getsequence">getSequence</h3>
+        <p>Get sequence by id from the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: <em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em></p>
+        <h4 id="parameters-11">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">guid</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/guid">Guid</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="getsequences">getSequences</h3>
+        <p>Get an array of all sequences in this project.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence[]</a></em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="importaecomps">importAEComps</h3>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-12">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">aepPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">compNames</div>
+            <div data-align="left"><em>string[]</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">targetBin</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/projectitem">ProjectItem</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="importallaecomps">importAllAEComps</h3>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-13">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">aepPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">targetBin</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/projectitem">ProjectItem</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="importfiles">importFiles</h3>
+        <p>Import files in root/target bin of the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-14">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">filePaths</div>
+            <div data-align="left"><em>string[]</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">suppressUI</div>
+            <div data-align="left"><em>boolean</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">targetBin</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/projectitem">ProjectItem</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">asNumberedStills</div>
+            <div data-align="left"><em>boolean</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="importsequences">importSequences</h3>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-15">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">projectPath</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+          <div>
+            <div data-align="left">sequenceIds</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/guid">Guid[]</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="lockedaccess">lockedAccess</h3>
+        <p>Get a read/upgrade locked access to Project, project state will not change during the execution of callback function. Can call executeTransaction while having locked access.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: <em>void</em></p>
+        <h4 id="parameters-16">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">callback</div>
+            <div data-align="left"><em>() => void</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="opensequence">openSequence</h3>
+        <p>Open a sequence and return true if successful.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-17">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">sequence</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="pausegrowing">pauseGrowing</h3>
+        <p>Pauses or resumes monitoring of actively-captured (growing) media files in the project. When paused, Premiere stops refreshing clips whose source files are still being written to disk, allowing stable playback at the current captured duration. Pass true to pause, false to resume.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-18">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">pause</div>
+            <div data-align="left"><em>boolean</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="save">save</h3>
+        <p>Save the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="saveas">saveAs</h3>
+        <p>Saves a copy of the project at the provided path, mirroring the 'File > Save As' behavior in Premiere Pro: the newly saved copy becomes the active project, just as it would after using 'Save As' in the application. Separately, and perhaps unexpectedly, the <code>Project</code> object <code>saveAs()</code> was called on is itself updated in place to represent that new copy. It does not stay pinned to the original project file. This also affects chained calls, meaning calling <code>saveAs()</code> again on the same object saves a copy of that new file, not the original. To continue working with the original project--for example, to derive several independent copies from the same source--reopen it explicitly via <code>Project.open()</code> before each subsequent <code>saveAs()</code> call, rather than assuming the existing handle still refers to it.</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-19">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">path</div>
+            <div data-align="left"><em>string</em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <h3 id="setactivesequence">setActiveSequence</h3>
+        <p>Set the active sequence of the project</p>
+        <p>Since: <strong>25.6</strong></p>
+        <p>Returns: Promise&#x3C;<em>boolean</em>></p>
+        <h4 id="parameters-20">Parameters</h4>
+        <div class="table">
+          <div>
+            <div data-align="left">Name</div>
+            <div data-align="left">Type</div>
+            <div data-align="left">Description</div>
+          </div>
+          <div>
+            <div data-align="left">sequence</div>
+            <div data-align="left"><em><a href="/premiere-pro/uxp/ppro-reference/classes/sequence">Sequence</a></em></div>
+            <div data-align="left">-</div>
+          </div>
+        </div>
+        <div class="horizontalline">
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

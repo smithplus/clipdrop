@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Package a UXP plugin</title>
+    <link rel="canonical" href="https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/">
+    <meta name="description" content="Package a UXP plugin">
+    <meta name="keywords" content="UXP Plugins, Distribution, Creative Cloud Marketplace, Creative Cloud Desktop, UXP Developer Tool, Packaging, CCX, Plugin ID Management, Multi-channel Distribution, Digital Signature, https://github.com/undavide">
+    <meta property="og:title" content="Package a UXP plugin">
+    <meta property="og:description" content="Package a UXP plugin">
+    <meta property="og:url" content="https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/">
+    <meta property="og:image" content="https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:alt" content="Developer Distribution - plugin ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Package a UXP plugin">
+    <meta name="twitter:description" content="Package a UXP plugin">
+    <meta name="twitter:image" content="https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="source" content="github">
+    <meta name="pathprefix" content="/premiere-pro/uxp">
+    <meta name="githubblobpath" content="https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/plugins/distribution/package/index.md">
+    <meta name="template" content="documentation">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/hlx_statics/scripts/scripts.js" type="module" crossorigin="use-credentials"></script>
+    <link rel="stylesheet" href="/hlx_statics/styles/styles.css">
+    <link rel="icon" href="data:,">
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <h1 id="package-a-uxp-plugin">Package a UXP plugin</h1>
+        <p>UXP plugins are packaged as <code>.ccx</code> files, which can be shared privately or published to the Creative Cloud Marketplace.</p>
+        <h2 id="the-ccx-file-format">The CCX file format</h2>
+        <p>A <code>.ccx</code> file is a regular ZIP file under the hood. Unless you have some special requirements, we suggest <strong>not to create it manually</strong> and let the UXP Developer Tool do it for you instead—as we will see later in this guide.</p>
+        <h3 id="differences-with-cep-extensions">Differences with CEP Extensions</h3>
+        <p>Compared to CEP extensions which relied on <code>.zxp</code> files, the UXP ecosystem simplifies the packaging and distribution process in different ways. Most notably, you <strong>no longer need to apply a Digital Signature and Timestamp the package</strong>.</p>
+        <p>The new <code>.ccx</code> format is <strong>installed directly by the Creative Cloud Desktop application</strong>, which has proved to be more reliable than the <code>ExManCmd</code> utility—easier for the final users to install, and less error prone.</p>
+        <p>Finally, UXP doesn't support the use of <code>MXI</code> files for advanced packaging configuration anymore.</p>
+        <h2 id="mind-your-plugins-id">Mind your Plugin's ID</h2>
+        <p>Before you package your plugin for distribution, make sure that the <code>manifest.json</code> file contains a valid <code>id</code> string property. The ID must be a <strong>unique identifier for your plugin</strong> and it is used to disambiguate plugins when installing them.</p>
+        <p>If you plan to <strong>publish to the Adobe Creative Cloud Marketplace</strong>, you should obtain the ID string from the <a href="https://developer.adobe.com/developer-distribution/creative-cloud/docs/guides/plugin-id#starting-from-adobe-developer-distribution">Developer Distribution portal</a> while creating a new UXP plugin listing, and using that in the <code>manifest.json</code> file. It is particularly important that the IDs in the <code>manifest.json</code> and Developer Distribution portal match, or the plugin will not pass the validation step.</p>
+        <div class="inlinealert info">
+          <div>
+            <div>
+              <pre><code>data-slots=text, text2
+</code></pre>
+            </div>
+          </div>
+          <div>
+            <div>
+              <pre><code>data-variant=info
+</code></pre>
+            </div>
+          </div>
+          <div>
+            <div>See <a href="/premiere-pro/uxp/plugins/distribution/listing/#2-create-a-new-listing">this guide</a> for more details on how to obtain the ID string from the Developer Distribution portal.</div>
+            <div><a href="/premiere-pro/uxp/plugins/distribution/listing/#2-create-a-new-listing"><picture>
+                  <source type="image/webp" srcset="./media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                  <source type="image/webp" srcset="./media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=750&#x26;format=webply&#x26;optimize=medium">
+                  <source type="image/png" srcset="./media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+                  <img loading="lazy" alt="Developer Distribution - plugin ID" src="./media_199f7c53059e1c5a30d9c9d4cdb91523a35f71b8b.png?width=750&#x26;format=png&#x26;optimize=medium" width="2500" height="1435">
+                </picture></a></div>
+          </div>
+        </div>
+        <h3 id="multi-channel-distribution">Multi-channel distribution</h3>
+        <p>If you plan to distribute your plugin through any channels—either marketplaces or direct distribution—that <em>also include</em> the Creative Cloud Marketplace, you should <strong>use two different IDs</strong>: one exclusively for the Creative Cloud Marketplace and one for the other channels.</p>
+        <p>This is particularly important for paid plugins. When a user attempts to install a plugin purchased from a third-party marketplace, the Creative Cloud Desktop application will <strong>validate the plugin's ID against their Adobe ID</strong>. When the plugin'sID matches only the Marketplace distribution, the installation will be rejected because the purchase cannot be verified.</p>
+        <ul>
+          <li>
+            <p>❌ <strong>With the same ID for all distribution channels</strong> (including the Creative Cloud Marketplace):</p>
+            <ol>
+              <li>A user purchases a UXP plugin from a third-party marketplace.</li>
+              <li>The Creative Cloud Desktop (CCD) application is in charge of the installation process and checks whether the plugin is available in the Creative Cloud Marketplace.</li>
+              <li>If the plugin is indeed listed in Adobe's Marketplace, the CCD application will check whether the current user (their Adobe ID) has purchased the plugin there.</li>
+              <li>Since the purchase hasn't happened on Adobe's Marketplace, the user isn't entitled to access the plugin—hence the installation fails.</li>
+            </ol>
+          </li>
+          <li>
+            <p>✅ <strong>With a different ID for the Creative Cloud Marketplace</strong>:</p>
+            <ol>
+              <li>A user purchases a UXP plugin from a third-party marketplace.</li>
+              <li>The Creative Cloud Desktop (CCD) application is in charge of the installation process and checks whether the plugin is available in the Creative Cloud Marketplace.</li>
+              <li>The plugin is not available in the Creative Cloud Marketplace; no user's entitlement check is performed, and the plugin can be successfully installed.</li>
+            </ol>
+          </li>
+        </ul>
+        <h2 id="package-with-the-uxp-developer-tool">Package with the UXP Developer Tool</h2>
+        <p>Open the UXP Developer Tool and make sure the plugin you intend to package is listed in the workspace—it doesn't need to be loaded in the host application.</p>
+        <p>Click on the <strong>•••</strong> icon to open the flyout menu and select <strong>Package</strong>.</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_13d785ee43478acaada1da36c0526444d415da639.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_13d785ee43478acaada1da36c0526444d415da639.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_13d785ee43478acaada1da36c0526444d415da639.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Package with the UXP Developer Tool" src="./media_13d785ee43478acaada1da36c0526444d415da639.png?width=750&#x26;format=png&#x26;optimize=medium" width="2500" height="1043">
+          </picture>
+        </p>
+        <p>This will open a dialog where you can select the folder where the package will be stored.</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1b5e3f04ce4351624e64f2ccc2732e57c9a00316e.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1b5e3f04ce4351624e64f2ccc2732e57c9a00316e.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1b5e3f04ce4351624e64f2ccc2732e57c9a00316e.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Destination folder" src="./media_1b5e3f04ce4351624e64f2ccc2732e57c9a00316e.png?width=750&#x26;format=png&#x26;optimize=medium" width="2500" height="1043">
+          </picture>
+        </p>
+        <p>If everything goes to plan, the package will be created and named after the plugin's ID, e.g., <code>Test-xjluvc_premierepro.ccx</code>.</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_18f393fdb1e3b812cb82072f8eacad89588d2f20c.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_18f393fdb1e3b812cb82072f8eacad89588d2f20c.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_18f393fdb1e3b812cb82072f8eacad89588d2f20c.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Package created" src="./media_18f393fdb1e3b812cb82072f8eacad89588d2f20c.png?width=750&#x26;format=png&#x26;optimize=medium" width="2500" height="1043">
+          </picture>
+        </p>
+        <p>A green toast notification will appear to confirm the success of the operation. If this is not the case, click the Details link on the red toast to open the Logs and check the error message</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_19e788c9699d677a46bfa7c4726a7c52e5f859804.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_19e788c9699d677a46bfa7c4726a7c52e5f859804.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_19e788c9699d677a46bfa7c4726a7c52e5f859804.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Package error" src="./media_19e788c9699d677a46bfa7c4726a7c52e5f859804.png?width=750&#x26;format=png&#x26;optimize=medium" width="2500" height="323">
+          </picture>
+        </p>
+        <p>Before distributing your package, test the installation to confirm it works as expected.</p>
+        <h3 id="packaging-hybrid-plugins">Packaging Hybrid Plugins</h3>
+        <p><a href="/premiere-pro/uxp/plugins/hybrid-plugins/">Hybrid plugins</a> contain native C++ libraries (<code>.uxpaddon</code> files) in addition to the standard JavaScript, HTML, and CSS files. When packaging a Hybrid plugin, ensure the following:</p>
+        <ol>
+          <li><strong>Directory structure</strong>: place the <code>.uxpaddon</code> binaries in the correct platform/architecture folder layout within your plugin bundle:</li>
+        </ol>
+        <pre><code class="language-txt">my-hybrid-plugin/
+├── manifest.json
+├── index.html
+├── index.js
+└── addons/
+    ├── mac/
+    │   ├── arm64/
+    │   │   └── sample-uxp-addon.uxpaddon
+    │   └── x64/
+    │       └── sample-uxp-addon.uxpaddon
+    └── win/
+        └── x64/
+            └── sample-uxp-addon.uxpaddon
+</code></pre>
+        <ol start="2">
+          <li><strong>All architectures</strong>: include binaries for macOS arm64 (Apple Silicon), macOS x64 (Intel), and Windows x64. While you can package and install a Hybrid plugin with only a subset of architectures (the plugin will simply fail to load on unsupported platforms), the <strong>Creative Cloud Marketplace requires all three</strong>—the Developer Distribution portal will reject your <code>.ccx</code> if any architecture is missing.</li>
+          <li><strong>Code signing (macOS)</strong>: sign and notarize the <code>.uxpaddon</code> executables with a valid Apple Developer ID certificate. Self-signed or test certificates are not accepted. The certificate must be valid for at least one year.</li>
+          <li><strong>Admin credentials</strong>: since Hybrid plugins include native code, users will be prompted for OS administrator credentials during installation and updates.</li>
+        </ol>
+        <p>If the directory structure is incorrect, the plugin will fail to load with a <em>"Plugin Manifest Validation Failed"</em> error in UDT.</p>
+        <h3 id="host-applications">Host Applications</h3>
+        <p>UXP plugin <code>.ccx</code> installers can target only one host application at a time; in fact, the <a href="/premiere-pro/uxp/plugins/concepts/manifest/#host"><code>host</code></a> property in the <code>manifest.json</code> file must be a single object of type <a href="/premiere-pro/uxp/plugins/concepts/manifest/#hostdefinition"><code>HostDefinition</code></a>.</p>
+        <p><strong>Only during development</strong>, for convenience, you can assign to the <code>host</code> property an array of <code>HostDefinition</code> objects, allowing the plugin to be loaded in multiple applications simultaneously.</p>
+        <pre><code class="language-json">// host as one HostDefinition object
+// ✅ can be used in production
+"host": {
+  "app": "premierepro", "minVersion": "25.6.0"
+}
+
+// host as an array of HostDefinition objects
+// ⚠️ only for development! ⚠️
+"host": [
+  { "app": "premierepro", "minVersion": "25.6.0" },
+  { "app": "ps", "minVersion": "25.0.0" }
+]
+</code></pre>
+        <div class="inlinealert info">
+          <div>
+            <div>
+              <pre><code>data-slots=text
+</code></pre>
+            </div>
+          </div>
+          <div>
+            <div>
+              <pre><code>data-variant=info
+</code></pre>
+            </div>
+          </div>
+          <div>
+            <div>If an array is present, the <strong>UXP Developer Tool will automatically package the plugin for the first host application</strong>, by converting the array into a single <code>HostDefinition</code> object under the hood.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

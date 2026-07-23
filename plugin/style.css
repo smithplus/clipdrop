@@ -21,13 +21,19 @@
 html,
 body {
   min-width: 280px;
-  min-height: 480px;
+  height: 100%;
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 13px;
   letter-spacing: 0;
+}
+
+/* The panel content can exceed the Premiere panel height (especially with the
+   preview open), so the body must scroll instead of clipping its lower half. */
+body {
+  overflow-y: auto;
 }
 
 .control,

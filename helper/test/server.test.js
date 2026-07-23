@@ -39,28 +39,8 @@ test("GET /health reports helper readiness", async (t) => {
 
   const response = await fetch(`${context.baseUrl}/health`);
   assert.equal(response.status, 200);
-  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+  assert.equal(response.headers.get("access-control-allow-origin"), null);
   assert.equal((await response.json()).ready, true);
-});
-
-test("OPTIONS preflight succeeds with permissive CORS headers", async (t) => {
-  const context = await startTestServer();
-  t.after(() => context.server.close());
-
-  const response = await fetch(`${context.baseUrl}/jobs`, {
-    method: "OPTIONS",
-    headers: {
-      "access-control-request-method": "POST",
-      "access-control-request-headers": "content-type,x-clipdrop-client",
-    },
-  });
-
-  assert.equal(response.status, 204);
-  assert.equal(response.headers.get("access-control-allow-origin"), "*");
-  assert.match(
-    response.headers.get("access-control-allow-headers"),
-    /x-clipdrop-client/,
-  );
 });
 
 test("POST /jobs creates a job that can be read", async (t) => {

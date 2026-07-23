@@ -5,23 +5,10 @@ const http = require("node:http");
 const MAX_BODY_BYTES = 1024 * 1024;
 const CLIENT_ID = "com.clipdrop.premiere";
 
-// The Premiere UXP panel sends custom headers (content-type, x-clipdrop-client),
-// which makes its requests non-simple and triggers a CORS preflight. Without
-// these headers the panel's fetch throws and the panel reports the engine as
-// unavailable even though it is listening. The engine stays bound to loopback,
-// so a permissive origin here does not widen its exposure.
-const CORS_HEADERS = {
-  "access-control-allow-origin": "*",
-  "access-control-allow-methods": "GET, POST, OPTIONS",
-  "access-control-allow-headers": "content-type, x-clipdrop-client",
-  "access-control-max-age": "600",
-};
-
 function sendJson(response, status, body) {
   response.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store",
-    ...CORS_HEADERS,
   });
   response.end(JSON.stringify(body));
 }
@@ -56,12 +43,6 @@ function createApiServer({ manager, getHealth }) {
   return http.createServer(async (request, response) => {
     const url = new URL(request.url, "http://127.0.0.1");
     try {
-      if (request.method === "OPTIONS") {
-        response.writeHead(204, CORS_HEADERS);
-        response.end();
-        return;
-      }
-
       if (request.method === "GET" && url.pathname === "/health") {
         sendJson(response, 200, await getHealth());
         return;

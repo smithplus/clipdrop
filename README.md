@@ -4,7 +4,7 @@ ClipDrop is a UXP extension for Adobe Premiere Pro that lets editors preview
 authorized YouTube media, mark In and Out points, download only the selected
 segment, and import it into the open project.
 
-> Status: `0.4.1` is a locally validated macOS Apple Silicon release. The
+> Status: `0.4.3` is a locally validated macOS Apple Silicon build. The
 > ClipDrop menu bar app includes its media engine, yt-dlp, ffmpeg, ffprobe, and
 > the Premiere panel. Users do not need Node.js, Homebrew, or a manually started
 > service. A Windows installer is the next distribution target.
@@ -29,7 +29,7 @@ segment, and import it into the open project.
 
 ## Install on macOS
 
-1. Download `ClipDrop-0.4.1-macOS-arm64.dmg`.
+1. Download `ClipDrop-0.4.3-macOS-arm64.dmg`.
 2. Drag `ClipDrop` to Applications and open it once.
 3. Keep `Launch at Login` enabled in the ClipDrop menu bar menu.
 4. Open Premiere Pro 25.6 or later.
@@ -80,21 +80,22 @@ linked below remain authoritative when they cover a topic more deeply.
 
 ### Current Snapshot
 
-- Current version: `0.4.1`.
+- Current version: `0.4.3` (unreleased dev build on this branch).
 - Branch and release source: `main`.
-- Public release:
-  [`v0.4.1`](https://github.com/smithplus/clipdrop/releases/tag/v0.4.1).
+- Last public release:
+  [`v0.4.1`](https://github.com/smithplus/clipdrop/releases/tag/v0.4.1). The
+  `0.4.3` DMG has only been built and installed locally, not published.
 - Release status: usable macOS Apple Silicon prerelease.
 - Local installation target: `/Applications/ClipDrop.app`.
 - Premiere requirement: version 25.6 or later.
 - Local API: `http://127.0.0.1:47821`.
 - Premiere plugin ID: `com.clipdrop.premiere`.
 - Companion app ID: `com.clipdrop.companion`.
-- Automated suite at this handoff: 105 tests.
+- Automated suite at this handoff: 108 tests.
 - Windows runtime paths exist, but no tested Windows installer is published.
 - The macOS app is not Developer ID signed or Apple notarized.
 
-The `0.4.1` panel is registered locally and its engine reports `ready: true`.
+The `0.4.3` panel is registered locally and its engine reports `ready: true`.
 The YouTube error 153 fix has automated coverage and is included in the public
 release, but its final confirmation inside a restarted Premiere WebView should
 be repeated when development resumes.
@@ -286,28 +287,50 @@ automatically when an editor may have unsaved work.
 - The macOS build targets `arm64` and `x64`, but `prepare:binaries` bundles
   host-architecture ffmpeg/ffprobe (`ffmpeg-static` ships only the host arch),
   so the `x64` DMG must be built on an Intel mac or supplied with `x64`
-  ffmpeg/ffprobe. `yt-dlp_macos` is already universal. The script now fails
-  loudly on a cross-architecture mismatch instead of shipping the wrong binary.
+  ffmpeg/ffprobe. `yt-dlp_macos` is already universal. The script fails loudly
+  on a cross-architecture mismatch when `prepare:binaries` runs for a foreign
+  arch. Caveat: a plain `build:mac` still packages both arches from one
+  host-arch binary set, so the emitted `x64` DMG is currently broken. Remove
+  `x64` from `mac.target` (build Intel only via `build:mac:x64` on an Intel
+  mac) before publishing an Intel artifact.
 - The Windows `nsis` target exists but is not yet validated on a real Windows
   machine with Premiere.
 - Some YouTube videos legitimately disable embedded playback.
 - The panel must remain usable with manual Start and End fields when preview
   fails.
 
-The next requested feature is an output destination mode that defaults to:
+#### Open items for the next session
+
+- **Preview error 153 is unresolved in the real Premiere WebView.** The
+  `plugin:` origin gives YouTube no valid HTTP referrer. Candidate fix: serve
+  `preview/player.html` from the companion's real HTTP origin
+  (`http://127.0.0.1:47821/preview`) instead of the `plugin:` protocol, and add
+  that origin to the manifest `webview.domains`. Needs live testing in
+  Premiere. Manual In/Out entry remains the working fallback for downloads.
+- **Engine reachability from the panel is unconfirmed.** A permissive CORS
+  allowance (`access-control-allow-origin: *`) was tried to fix a panel
+  "unavailable" state and then reverted: it let any website POST jobs to the
+  loopback engine (CSRF), and the outage was actually the app being removed
+  from `/Applications`. If a running engine still reports unavailable in the
+  panel, add CORS scoped to the panel's real origin, never a wildcard.
+- The panel now polls `/health` every 3s until ready so a transient outage
+  self-heals instead of latching on "unavailable".
+
+The default output destination is a `downloads` folder next to the open
+project:
 
 ```text
-<Premiere project directory>/Downloads
+<Premiere project directory>/downloads
 ```
 
-The active Premiere `Project.path` property supplies the absolute project file
-path. Derive its parent directory in a cross-platform helper, append
-`Downloads`, and send that path to the companion engine. The companion should
-create the directory, preserving the panel's `"request"` filesystem permission.
-Keep `Custom Folder` as an explicit alternative. If the project has not been
-saved and has no usable path, show a clear message and fall back to the custom
-folder picker. This feature has been requested but is not implemented in
-`0.4.1`.
+`plugin/src/premiere.js` reads the active project path and
+`plugin/src/domain.js` `deriveDownloadsDir` derives the sibling `downloads`
+directory (preserving the platform separator). The companion creates the
+directory before downloading, preserving the panel's `"request"` filesystem
+permission. A manual `Choose` wins for the session, and an unsaved project
+falls back to the last chosen folder or the picker. The Premiere `Project.path`
+property is assumed but not yet confirmed inside a running Premiere; if it is
+unavailable the panel degrades to the manual picker.
 
 ### Safe Handoff Procedure
 

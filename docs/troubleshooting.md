@@ -24,7 +24,7 @@ Use `Open Logs` from the same menu when restart does not recover the app.
 3. Save the project and restart Premiere.
 4. Open `Window > UXP Plugins > ClipDrop`.
 
-For development builds, install `dist/ClipDrop-0.4.1.ccx` manually with UPIA as
+For development builds, install `dist/ClipDrop-0.4.3.ccx` manually with UPIA as
 described in [Installation](installation.md).
 
 ## Download Succeeds but Import Fails

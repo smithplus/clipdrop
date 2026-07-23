@@ -1,8 +1,9 @@
 # ClipDrop para Adobe Premiere Pro
 
 ClipDrop descarga material de YouTube que tengas permiso para usar, permite
-elegir un clip completo o un segmento y lo importa directamente en una carpeta
-`ClipDrop Imports` del proyecto abierto en Premiere.
+previsualizarlo, marcar un punto In y Out, elegir un clip completo o un
+segmento y lo importa directamente en una carpeta `ClipDrop Imports` del
+proyecto abierto en Premiere.
 
 ## Requisitos
 
@@ -48,7 +49,7 @@ Genera el paquete:
 npm run package:plugin
 ```
 
-El archivo resultante queda en `dist/ClipDrop-0.1.0.ccx`. Ábrelo con doble clic
+El archivo resultante queda en `dist/ClipDrop-0.2.0.ccx`. Ábrelo con doble clic
 para que Creative Cloud Desktop instale el panel. El Helper debe permanecer
 abierto mientras se realizan descargas.
 
@@ -59,13 +60,17 @@ validación realizada en Premiere Pro 26.3.
 ## Uso
 
 1. Pega un enlace público de YouTube.
-2. Elige `Clip completo` o `Segmento`.
-3. Elige video con audio, sólo audio o sólo video.
-4. Elige la carpeta de destino.
-5. Pulsa `Descargar e importar`.
+2. Pulsa `Preview` para cargar el reproductor oficial de YouTube.
+3. Marca In y Out con la timeline, los botones o los campos de tiempo.
+4. Elige video con audio, sólo audio o sólo video.
+5. Elige la carpeta de destino.
+6. Pulsa `Descargar e importar`.
 
 Los segmentos aceptan segundos, `MM:SS` o `HH:MM:SS`. El video se normaliza a
 H.264/AAC en MP4; el audio se prepara como WAV de 48 kHz.
+
+Si YouTube no permite embeber un video, la selección manual por tiempos sigue
+disponible.
 
 ## Desarrollo
 

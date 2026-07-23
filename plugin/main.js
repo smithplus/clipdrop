@@ -2,15 +2,25 @@
 
 const { entrypoints, storage } = require("uxp");
 const premiere = require("premierepro");
-const { buildJobPayload, phaseLabel } = require("./src/domain");
+const { buildJobPayload, phaseLabel, timeToSeconds } = require("./src/domain");
 const { HelperClient } = require("./src/helper-client");
 const { importIntoPremiere } = require("./src/premiere");
 const { ClipDropController } = require("./src/controller");
+const { parseYouTubeVideoId } = require("./src/youtube");
+const { SelectionModel, formatTimecode } = require("./src/selection");
+const {
+  createPreviewCommand,
+  parsePreviewEvent,
+} = require("./src/preview-protocol");
 
 let initialized = false;
 let mode = "full";
 let outputKind = "video_audio";
 let controller;
+let previewReady = false;
+let previewVideoId = null;
+let previewPlayerState = -1;
+const selection = new SelectionModel(0);
 
 function setGroupSelection(buttons, selected) {
   for (const button of buttons) {
@@ -30,6 +40,122 @@ function showMessage(text = "", type = "") {
   message.textContent = text;
   message.classList.toggle("is-error", type === "error");
   message.classList.toggle("is-success", type === "success");
+}
+
+function setDurationMode(nextMode) {
+  mode = nextMode;
+  const fullButton = document.getElementById("mode-full");
+  const segmentButton = document.getElementById("mode-segment");
+  setGroupSelection(
+    [fullButton, segmentButton],
+    nextMode === "segment" ? segmentButton : fullButton,
+  );
+  document.getElementById("time-fields").hidden = nextMode !== "segment";
+}
+
+function sendPreview(type, payload = {}) {
+  document
+    .getElementById("preview-player")
+    .postMessage(createPreviewCommand(type, payload), "*");
+}
+
+function renderSelection({ syncFields = true } = {}) {
+  const {
+    durationSeconds,
+    currentSeconds,
+    inSeconds,
+    outSeconds,
+  } = selection.snapshot();
+  const duration = durationSeconds || 1;
+  const inPercent = (inSeconds / duration) * 100;
+  const outPercent = (outSeconds / duration) * 100;
+  const currentPercent = (currentSeconds / duration) * 100;
+
+  const inRange = document.getElementById("selection-in-range");
+  const outRange = document.getElementById("selection-out-range");
+  inRange.max = String(durationSeconds);
+  outRange.max = String(durationSeconds);
+  inRange.value = String(inSeconds);
+  outRange.value = String(outSeconds);
+
+  const selectedRange = document.getElementById("selection-range");
+  selectedRange.style.left = `${inPercent}%`;
+  selectedRange.style.width = `${Math.max(0, outPercent - inPercent)}%`;
+  document.getElementById("selection-playhead").style.left =
+    `${currentPercent}%`;
+  document.getElementById("preview-current-time").textContent =
+    formatTimecode(currentSeconds);
+  document.getElementById("preview-total-time").textContent =
+    formatTimecode(durationSeconds);
+  document.getElementById("selection-duration").textContent =
+    formatTimecode(Math.max(0, outSeconds - inSeconds));
+
+  if (syncFields && durationSeconds > 0) {
+    document.getElementById("start-time").value = formatTimecode(inSeconds);
+    document.getElementById("end-time").value = formatTimecode(outSeconds);
+  }
+}
+
+function handlePreviewEvent(data) {
+  const event = parsePreviewEvent(data);
+  if (!event) {
+    return;
+  }
+  if (event.type === "ready") {
+    previewReady = true;
+    if (previewVideoId) {
+      sendPreview("load", { videoId: previewVideoId });
+    }
+    return;
+  }
+  if (event.type === "metadata") {
+    selection.setDuration(event.durationSeconds);
+    renderSelection();
+    document.getElementById("load-preview").disabled = false;
+    showMessage("Preview listo.", "success");
+    return;
+  }
+  if (event.type === "time") {
+    selection.setCurrent(event.currentSeconds);
+    previewPlayerState = event.playerState;
+    document.getElementById("preview-toggle").textContent =
+      previewPlayerState === 1 ? "❚❚" : "▶";
+    renderSelection({ syncFields: false });
+    return;
+  }
+  if (event.type === "error") {
+    document.getElementById("load-preview").disabled = false;
+    showMessage(event.message, "error");
+  }
+}
+
+function loadPreview() {
+  previewVideoId = parseYouTubeVideoId(
+    document.getElementById("source-url").value.trim(),
+  );
+  document.getElementById("preview-section").hidden = false;
+  document.getElementById("load-preview").disabled = true;
+  showMessage("Cargando preview...");
+  if (previewReady) {
+    sendPreview("load", { videoId: previewVideoId });
+  }
+}
+
+function updateSelectionFromField(kind) {
+  const input = document.getElementById(
+    kind === "in" ? "start-time" : "end-time",
+  );
+  const seconds = timeToSeconds(input.value.trim());
+  if (seconds === null) {
+    throw new TypeError("Usa segundos, MM:SS o HH:MM:SS.");
+  }
+  if (kind === "in") {
+    selection.setIn(seconds);
+  } else {
+    selection.setOut(seconds);
+  }
+  setDurationMode("segment");
+  renderSelection();
 }
 
 function renderState(state) {
@@ -109,19 +235,89 @@ function initialize() {
     onState: renderState,
   });
 
-  const fullButton = document.getElementById("mode-full");
-  const segmentButton = document.getElementById("mode-segment");
-  const modeButtons = [fullButton, segmentButton];
-  fullButton.addEventListener("click", () => {
-    mode = "full";
-    setGroupSelection(modeButtons, fullButton);
-    document.getElementById("time-fields").hidden = true;
+  document
+    .getElementById("mode-full")
+    .addEventListener("click", () => setDurationMode("full"));
+  document
+    .getElementById("mode-segment")
+    .addEventListener("click", () => setDurationMode("segment"));
+
+  document.getElementById("load-preview").addEventListener("click", () => {
+    try {
+      loadPreview();
+    } catch (error) {
+      showMessage(error.message, "error");
+    }
   });
-  segmentButton.addEventListener("click", () => {
-    mode = "segment";
-    setGroupSelection(modeButtons, segmentButton);
-    document.getElementById("time-fields").hidden = false;
+  window.addEventListener("message", (event) => {
+    handlePreviewEvent(event.data);
   });
+
+  const inRange = document.getElementById("selection-in-range");
+  const outRange = document.getElementById("selection-out-range");
+  inRange.addEventListener("input", () => {
+    selection.setIn(inRange.value);
+    selection.setCurrent(selection.inSeconds);
+    setDurationMode("segment");
+    renderSelection();
+    sendPreview("seek", {
+      seconds: selection.inSeconds,
+      allowSeekAhead: false,
+    });
+  });
+  outRange.addEventListener("input", () => {
+    selection.setOut(outRange.value);
+    selection.setCurrent(selection.outSeconds);
+    setDurationMode("segment");
+    renderSelection();
+    sendPreview("seek", {
+      seconds: selection.outSeconds,
+      allowSeekAhead: false,
+    });
+  });
+  inRange.addEventListener("change", () => {
+    sendPreview("seek", { seconds: selection.inSeconds, allowSeekAhead: true });
+  });
+  outRange.addEventListener("change", () => {
+    sendPreview("seek", {
+      seconds: selection.outSeconds,
+      allowSeekAhead: true,
+    });
+  });
+
+  document.getElementById("mark-in").addEventListener("click", () => {
+    selection.markIn();
+    setDurationMode("segment");
+    renderSelection();
+  });
+  document.getElementById("mark-out").addEventListener("click", () => {
+    selection.markOut();
+    setDurationMode("segment");
+    renderSelection();
+  });
+  document.getElementById("play-selection").addEventListener("click", () => {
+    sendPreview("playSelection", {
+      inSeconds: selection.inSeconds,
+      outSeconds: selection.outSeconds,
+    });
+  });
+  document.getElementById("preview-toggle").addEventListener("click", () => {
+    sendPreview(previewPlayerState === 1 ? "pause" : "play");
+  });
+
+  for (const [id, kind] of [
+    ["start-time", "in"],
+    ["end-time", "out"],
+  ]) {
+    document.getElementById(id).addEventListener("change", () => {
+      try {
+        updateSelectionFromField(kind);
+        showMessage("");
+      } catch (error) {
+        showMessage(error.message, "error");
+      }
+    });
+  }
 
   const outputButtons = [
     document.getElementById("output-video-audio"),
@@ -176,6 +372,7 @@ function initialize() {
   });
 
   controller.checkHealth().catch(() => {});
+  renderSelection();
 }
 
 document.addEventListener("DOMContentLoaded", initialize);

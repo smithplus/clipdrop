@@ -3,11 +3,12 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { getHealth } = require("../src/health");
+const packageJson = require("../../package.json");
 
 test("getHealth reports ready only when both media binaries exist", async () => {
   const result = await getHealth(async (command) => command === "ffmpeg");
 
-  assert.equal(result.version, "0.1.0");
+  assert.equal(result.version, packageJson.version);
   assert.equal(result.platform, process.platform);
   assert.deepEqual(result.binaries, { ytDlp: false, ffmpeg: true });
   assert.equal(result.ready, false);

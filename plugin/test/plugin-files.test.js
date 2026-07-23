@@ -21,12 +21,28 @@ test("UXP manifest targets Premiere 25.6 with narrow permissions", () => {
   assert.deepEqual(manifest.requiredPermissions.network.domains, [
     "http://127.0.0.1:47821",
   ]);
+  assert.deepEqual(manifest.requiredPermissions.webview, {
+    allow: "yes",
+    domains: [
+      "https://www.youtube.com",
+      "https://www.youtube-nocookie.com",
+    ],
+    allowLocalRendering: "yes",
+    enableMessageBridge: "localOnly",
+  });
 });
 
 test("panel markup contains every primary workflow control", () => {
   const html = fs.readFileSync(path.join(pluginRoot, "index.html"), "utf8");
   for (const id of [
     "source-url",
+    "load-preview",
+    "preview-player",
+    "selection-timeline",
+    "mark-in",
+    "mark-out",
+    "play-selection",
+    "selection-duration",
     "mode-full",
     "mode-segment",
     "start-time",
@@ -41,4 +57,23 @@ test("panel markup contains every primary workflow control", () => {
   ]) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
+});
+
+test("local preview page loads the official YouTube player API", () => {
+  const html = fs.readFileSync(
+    path.join(pluginRoot, "preview", "player.html"),
+    "utf8",
+  );
+  const script = fs.readFileSync(
+    path.join(pluginRoot, "preview", "player.js"),
+    "utf8",
+  );
+  assert.match(html, /https:\/\/www\.youtube\.com\/iframe_api/);
+  assert.match(html, /src="player\.js"/);
+  assert.ok(
+    html.indexOf('src="player.js"') <
+      html.indexOf("https://www.youtube.com/iframe_api"),
+    "the message bridge must register before YouTube calls its ready callback",
+  );
+  assert.match(script, /window\.uxpHost\.postMessage/);
 });

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClipDrop Preview Layout</title>
+    <link rel="stylesheet" href="../../style.css" />
+  </head>
+  <body>
+    <script>
+      fetch("../../index.html")
+        .then((response) => response.text())
+        .then((source) => {
+          const parsed = new DOMParser().parseFromString(source, "text/html");
+          document.body.innerHTML = parsed.body.innerHTML;
+          document.getElementById("legal-notice").hidden = true;
+          document.getElementById("preview-section").hidden = false;
+          document.getElementById("time-fields").hidden = false;
+          document.getElementById("mode-full").classList.remove("is-selected");
+          document.getElementById("mode-segment").classList.add("is-selected");
+          document.getElementById("preview-current-time").textContent =
+            "00:39.280";
+          document.getElementById("preview-total-time").textContent =
+            "02:10.250";
+          document.getElementById("start-time").value = "00:39.280";
+          document.getElementById("end-time").value = "01:27.500";
+          document.getElementById("selection-duration").textContent =
+            "00:48.220";
+          document.getElementById("selection-range").style.left = "30%";
+          document.getElementById("selection-range").style.width = "37%";
+          document.getElementById("selection-playhead").style.left = "46%";
+        });
+    </script>
+  </body>
+</html>

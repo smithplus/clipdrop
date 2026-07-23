@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClipDrop Player Runtime Test</title>
+    <style>
+      html,
+      body,
+      #player {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #000;
+      }
+    </style>
+    <script>
+      window.uxpHost = {
+        postMessage(message) {
+          document.title = `ClipDrop Player: ${message.type}`;
+          if (message.type === "ready") {
+            window.dispatchEvent(
+              new MessageEvent("message", {
+                data: {
+                  version: 1,
+                  type: "load",
+                  videoId: "YE7VzlLtp-4",
+                },
+              }),
+            );
+          }
+        },
+      };
+    </script>
+    <script src="../../preview/player.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+  </head>
+  <body>
+    <div id="player"></div>
+  </body>
+</html>

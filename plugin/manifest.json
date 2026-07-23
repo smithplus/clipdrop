@@ -2,7 +2,7 @@
   "manifestVersion": 5,
   "id": "com.clipdrop.premiere",
   "name": "ClipDrop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.html",
   "host": {
     "app": "premierepro",
@@ -34,6 +34,15 @@
       "domains": [
         "http://127.0.0.1:47821"
       ]
+    },
+    "webview": {
+      "allow": "yes",
+      "domains": [
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com"
+      ],
+      "allowLocalRendering": "yes",
+      "enableMessageBridge": "localOnly"
     },
     "localFileSystem": "request"
   }

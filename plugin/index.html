@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClipDrop</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <main id="app" class="app-shell">
+      <header class="app-header">
+        <div>
+          <h1>ClipDrop</h1>
+          <p>Importar desde YouTube</p>
+        </div>
+        <div class="helper-status" title="Estado de ClipDrop Helper">
+          <span id="status-dot" class="status-dot is-checking"></span>
+          <span id="helper-label">Comprobando</span>
+        </div>
+      </header>
+
+      <section id="legal-notice" class="legal-notice" hidden>
+        <p>
+          Usa esta herramienta sólo con material propio, autorizado o permitido
+          legalmente. No evita DRM, pagos ni accesos privados.
+        </p>
+        <button id="accept-notice" type="button" class="quiet-button">Entendido</button>
+      </section>
+
+      <form id="clip-form" novalidate>
+        <div class="field">
+          <label for="source-url">Enlace</label>
+          <input
+            id="source-url"
+            name="url"
+            type="url"
+            inputmode="url"
+            autocomplete="off"
+            placeholder="https://youtu.be/..."
+          />
+        </div>
+
+        <fieldset class="field">
+          <legend>Duración</legend>
+          <div class="segmented two-columns" role="group" aria-label="Duración">
+            <button id="mode-full" class="segment-button is-selected" type="button" aria-pressed="true">
+              Clip completo
+            </button>
+            <button id="mode-segment" class="segment-button" type="button" aria-pressed="false">
+              Segmento
+            </button>
+          </div>
+        </fieldset>
+
+        <div id="time-fields" class="time-grid" hidden>
+          <div class="field">
+            <label for="start-time">Inicio</label>
+            <input id="start-time" type="text" inputmode="decimal" placeholder="00:00" />
+          </div>
+          <div class="field">
+            <label for="end-time">Final</label>
+            <input id="end-time" type="text" inputmode="decimal" placeholder="00:30" />
+          </div>
+        </div>
+
+        <fieldset class="field">
+          <legend>Salida</legend>
+          <div class="segmented output-grid" role="group" aria-label="Tipo de salida">
+            <button
+              id="output-video-audio"
+              class="segment-button is-selected"
+              type="button"
+              aria-pressed="true"
+            >
+              Video + audio
+            </button>
+            <button
+              id="output-audio-only"
+              class="segment-button"
+              type="button"
+              aria-pressed="false"
+            >
+              Sólo audio
+            </button>
+            <button
+              id="output-video-only"
+              class="segment-button"
+              type="button"
+              aria-pressed="false"
+            >
+              Sólo video
+            </button>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="output-folder">Guardar en</label>
+          <div class="folder-row">
+            <input id="output-folder" type="text" readonly placeholder="Elige una carpeta" />
+            <button id="choose-folder" class="secondary-button" type="button">Elegir</button>
+          </div>
+        </div>
+
+        <div id="progress-area" class="progress-area" aria-live="polite">
+          <div class="progress-copy">
+            <span id="progress-label">Listo</span>
+            <span id="progress-value"></span>
+          </div>
+          <progress id="progress-bar" max="100" value="0"></progress>
+          <p id="message" class="message"></p>
+        </div>
+
+        <div class="action-row">
+          <button id="import-button" class="primary-button" type="submit">
+            Descargar e importar
+          </button>
+          <button id="cancel-button" class="danger-button" type="button" hidden>
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

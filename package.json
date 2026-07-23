@@ -1,0 +1,17 @@
+{
+  "name": "premiere-clipdrop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Download permitted online media and import it into Adobe Premiere Pro.",
+  "scripts": {
+    "test": "node --test helper/test/*.test.js plugin/test/*.test.js scripts/test/*.test.js",
+    "test:helper": "node --test helper/test/*.test.js",
+    "test:plugin": "node --test plugin/test/*.test.js",
+    "test:packaging": "node --test scripts/test/*.test.js",
+    "start:helper": "node helper/src/cli.js",
+    "package:plugin": "node scripts/package-plugin.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

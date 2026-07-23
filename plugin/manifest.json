@@ -1,0 +1,40 @@
+{
+  "manifestVersion": 5,
+  "id": "com.clipdrop.premiere",
+  "name": "ClipDrop",
+  "version": "0.1.0",
+  "main": "index.html",
+  "host": {
+    "app": "premierepro",
+    "minVersion": "25.6.0"
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "clipdropPanel",
+      "label": {
+        "default": "ClipDrop"
+      },
+      "minimumSize": {
+        "width": 280,
+        "height": 480
+      },
+      "preferredDockedSize": {
+        "width": 340,
+        "height": 680
+      },
+      "preferredFloatingSize": {
+        "width": 380,
+        "height": 720
+      }
+    }
+  ],
+  "requiredPermissions": {
+    "network": {
+      "domains": [
+        "http://127.0.0.1:47821"
+      ]
+    },
+    "localFileSystem": "request"
+  }
+}

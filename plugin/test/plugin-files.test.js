@@ -93,6 +93,23 @@ test("panel footer displays the manifest version", () => {
   assert.equal(version, manifest.version);
 });
 
+test("panel stylesheet only uses layout modes supported by Premiere UXP", () => {
+  const css = fs.readFileSync(path.join(pluginRoot, "style.css"), "utf8");
+
+  assert.doesNotMatch(css, /display:\s*grid/);
+  assert.match(css, /form\s*\{[\s\S]*?width:\s*100%/);
+  for (const selector of [
+    ".url-row",
+    ".preview-controls",
+    ".segmented",
+    ".time-grid",
+    ".folder-row",
+  ]) {
+    const escaped = selector.replace(".", "\\.");
+    assert.match(css, new RegExp(`${escaped}\\s*\\{[\\s\\S]*?display:\\s*flex`));
+  }
+});
+
 test("local preview page loads the official YouTube player API", () => {
   const html = fs.readFileSync(
     path.join(pluginRoot, "preview", "player.html"),

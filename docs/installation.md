@@ -21,11 +21,11 @@ Start the Helper:
 open "helper/install/macos/Start ClipDrop Helper.command"
 ```
 
-Double-click `dist/ClipDrop-0.3.0.ccx` to install it. You can also use UPIA:
+Double-click `dist/ClipDrop-0.3.1.ccx` to install it. You can also use UPIA:
 
 ```sh
 "/Library/Application Support/Adobe/Adobe Desktop Common/RemoteComponents/UPI/UnifiedPluginInstallerAgent/UnifiedPluginInstallerAgent.app/Contents/MacOS/UnifiedPluginInstallerAgent" \
-  --install "/full/path/ClipDrop-0.3.0.ccx"
+  --install "/full/path/ClipDrop-0.3.1.ccx"
 ```
 
 ## Windows
@@ -33,13 +33,13 @@ Double-click `dist/ClipDrop-0.3.0.ccx` to install it. You can also use UPIA:
 1. Install Node.js, yt-dlp, and ffmpeg.
 2. Confirm `node`, `yt-dlp`, `ffmpeg`, and `ffprobe` work from CMD.
 3. Run `helper\install\windows\Start ClipDrop Helper.cmd`.
-4. Open `dist\ClipDrop-0.3.0.ccx`.
+4. Open `dist\ClipDrop-0.3.1.ccx`.
 
 UPIA can also install the package without navigating through Creative Cloud
 Desktop:
 
 ```bat
-"%CommonProgramFiles%\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\path\ClipDrop-0.3.0.ccx"
+"%CommonProgramFiles%\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\path\ClipDrop-0.3.1.ccx"
 ```
 
 ## Open the Panel

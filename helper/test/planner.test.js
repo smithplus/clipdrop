@@ -68,3 +68,18 @@ test("createConversionPlan removes audio for video-only jobs", () => {
   assert.ok(plan.args.includes("-an"));
   assert.equal(plan.args.includes("aac"), false);
 });
+
+test("plans use explicitly bundled media binaries", () => {
+  const download = createDownloadPlan(job, "/tmp/clipdrop-job", {
+    ytDlp: "/bundle/yt-dlp",
+  });
+  const conversion = createConversionPlan(
+    job,
+    "/tmp/source.webm",
+    "/tmp/final.mp4",
+    { ffmpeg: "/bundle/ffmpeg" },
+  );
+
+  assert.equal(download.command, "/bundle/yt-dlp");
+  assert.equal(conversion.command, "/bundle/ffmpeg");
+});

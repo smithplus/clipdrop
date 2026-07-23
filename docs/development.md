@@ -8,8 +8,8 @@ cd clipdrop
 npm test
 ```
 
-The project has no npm runtime dependencies. Tests use Node.js's built-in test
-runner.
+Root tests use Node.js's built-in test runner. Desktop packaging dependencies
+live under `companion/` and are not needed to test the core modules.
 
 ## Commands
 
@@ -20,12 +20,15 @@ npm run test:plugin
 npm run test:packaging
 npm run start:helper
 npm run package:plugin
+npm install --prefix companion
+npm run build:mac
 ```
 
 ## Structure
 
 - `plugin/`: UXP panel and preview.
 - `helper/`: local API and media processing.
+- `companion/`: menu bar app, bundled-tool preparation, and desktop installer.
 - `scripts/`: packaging.
 - `dist/`: `.ccx` package.
 - `docs/`: architecture, installation, and design decisions.
@@ -36,7 +39,7 @@ npm run package:plugin
 2. Confirm it fails because the behavior is absent.
 3. Implement the smallest change.
 4. Run the complete suite.
-5. Rebuild the `.ccx`.
+5. Rebuild the `.ccx` or the full macOS installer.
 6. Install and test it in Premiere.
 
 ## Load with UDT
@@ -49,5 +52,5 @@ npm run package:plugin
 ## GitHub Actions
 
 `.github/workflows/validate.yml` runs tests, builds the `.ccx`, and uploads it as
-a workflow artifact. Self-contained cross-platform installers will be added in
-a later phase.
+a workflow artifact. The macOS installer is currently built and validated on
+Apple Silicon because it contains architecture-specific media binaries.

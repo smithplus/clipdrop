@@ -2,10 +2,10 @@
 
 const path = require("node:path");
 
-function createDownloadPlan(job, workingDirectory) {
+function createDownloadPlan(job, workingDirectory, binaries = {}) {
   const outputTemplate = path.join(workingDirectory, "source.%(ext)s");
   return {
-    command: "yt-dlp",
+    command: binaries.ytDlp || "yt-dlp",
     outputTemplate,
     args: [
       "--no-playlist",
@@ -26,7 +26,7 @@ function segmentArgs(job) {
   return ["-ss", String(job.startSeconds), "-to", String(job.endSeconds)];
 }
 
-function createConversionPlan(job, sourcePath, outputPath) {
+function createConversionPlan(job, sourcePath, outputPath, binaries = {}) {
   const common = [
     "-y",
     "-hide_banner",
@@ -80,7 +80,7 @@ function createConversionPlan(job, sourcePath, outputPath) {
   }
 
   return {
-    command: "ffmpeg",
+    command: binaries.ffmpeg || "ffmpeg",
     args: [...common, ...mediaArgs, outputPath],
     outputPath,
   };

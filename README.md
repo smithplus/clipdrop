@@ -4,61 +4,43 @@ ClipDrop is a UXP extension for Adobe Premiere Pro that lets editors preview
 authorized YouTube media, mark In and Out points, download only the selected
 segment, and import it into the open project.
 
-> Status: `0.3.1` is a functional development release. The panel, preview, and
-> conversion pipeline have been tested on macOS with Premiere Pro 26.3. A
-> self-contained installer that removes Node.js, yt-dlp, and ffmpeg as external
-> requirements is still under development.
+> Status: `0.4.0` is a locally validated macOS Apple Silicon release. The
+> ClipDrop menu bar app includes its media engine, yt-dlp, ffmpeg, ffprobe, and
+> the Premiere panel. Users do not need Node.js, Homebrew, or a manually started
+> service. A Windows installer is the next distribution target.
 
 ## Features
 
 - Preview through the official YouTube player.
 - Timeline with a playhead and In/Out markers.
-- In and Out marking from the current time or editable fields.
-- Full clip or selected segment.
+- Full clip or precise selected segment.
 - Video with audio, WAV audio, or video without audio.
-- Conversion to Premiere-friendly formats.
+- Premiere-friendly H.264/AAC and 48 kHz WAV output.
 - Automatic import into `ClipDrop Imports`.
-- Local Helper restricted to `127.0.0.1`.
+- Menu bar status, restart, logs, and launch-at-login controls.
+- Local-only communication on `127.0.0.1`.
 
-## Current Requirements
+## Install on macOS
 
-- Adobe Premiere Pro 25.6 or later.
-- Node.js 20 or later.
-- yt-dlp.
-- ffmpeg and ffprobe.
-
-The planned self-contained release will bundle these dependencies and start the
-Helper automatically.
-
-## Quick Start
-
-### macOS
-
-```sh
-brew install node yt-dlp ffmpeg
-```
-
-1. Download or clone this repository.
-2. Open `helper/install/macos/Start ClipDrop Helper.command`.
-3. Install `dist/ClipDrop-0.3.1.ccx`.
-4. Open a project in Premiere.
+1. Download `ClipDrop-0.4.0-macOS-arm64.dmg`.
+2. Drag `ClipDrop` to Applications and open it once.
+3. Keep `Launch at Login` enabled in the ClipDrop menu bar menu.
+4. Open Premiere Pro 25.6 or later.
 5. Open `Window > UXP Plugins > ClipDrop`.
 
-### Windows
+The app registers the bundled Premiere panel through Adobe's installed UPIA
+component. Creative Cloud does not need to remain open while ClipDrop runs.
+Because the current development build is not notarized, macOS may require
+right-clicking ClipDrop and selecting `Open` the first time.
 
-1. Install Node.js, yt-dlp, and ffmpeg.
-2. Open `helper\install\windows\Start ClipDrop Helper.cmd`.
-3. Install `dist\ClipDrop-0.3.1.ccx`.
-4. Open `Window > UXP Plugins > ClipDrop` in Premiere.
-
-See [Installation](docs/installation.md) to use UPIA without navigating through
-Creative Cloud Desktop.
+See [Installation](docs/installation.md) for local development and manual panel
+installation.
 
 ## Usage
 
 1. Paste a public YouTube link that you are authorized to download.
 2. Select `Preview`.
-3. Mark In and Out on the timeline, use the buttons, or enter the times.
+3. Mark In and Out on the timeline, use the controls, or enter the times.
 4. Choose `Video + Audio`, `Audio Only`, or `Video Only`, then select a folder.
 5. Select `Download and Import`.
 
@@ -69,12 +51,14 @@ available when a video blocks embedded playback.
 
 ```sh
 npm test
-npm run start:helper
 npm run package:plugin
+npm install --prefix companion
+npm run build:mac
 ```
 
-The automated suite covers validation, jobs, conversion, the local API,
-Premiere integration, In/Out selection, preview messages, and packaging.
+The suite covers the menu app, bundled binary resolution, local API, jobs,
+conversion, Premiere integration, In/Out selection, preview messages, and
+packaging.
 
 ## Documentation
 
@@ -84,7 +68,6 @@ Premiere integration, In/Out selection, preview messages, and packaging.
 - [Troubleshooting](docs/troubleshooting.md)
 - [Local validation](docs/local-validation-2026-07-23.md)
 - [Standalone distribution design](docs/superpowers/specs/2026-07-23-clipdrop-standalone-distribution-design.md)
-- [Preview design](docs/superpowers/specs/2026-07-23-clipdrop-preview-selection-design.md)
 
 ## Responsible Use
 

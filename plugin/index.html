@@ -14,9 +14,9 @@
           <h1>ClipDrop</h1>
           <p>Import from YouTube</p>
         </div>
-        <div class="helper-status" title="ClipDrop Helper status">
+        <div class="engine-status" title="ClipDrop status">
           <span id="status-dot" class="status-dot is-checking"></span>
-          <span id="helper-label">Checking</span>
+          <span id="connection-label">Starting</span>
         </div>
       </header>
 
@@ -25,7 +25,7 @@
           Use this tool only with media you own or are authorized to download.
           It does not bypass DRM, paywalls, or private access.
         </p>
-        <button id="accept-notice" type="button" class="quiet-button">Got it</button>
+        <div id="accept-notice" class="control quiet-button" role="button" tabindex="0">Got it</div>
       </section>
 
       <form id="clip-form" novalidate>
@@ -40,9 +40,9 @@
               autocomplete="off"
               placeholder="https://youtu.be/..."
             />
-            <button id="load-preview" class="secondary-button" type="button">
+            <div id="load-preview" class="control secondary-button" role="button" tabindex="0">
               Preview
-            </button>
+            </div>
           </div>
         </div>
 
@@ -88,42 +88,43 @@
           </div>
 
           <div class="preview-controls">
-            <button
+            <div
               id="preview-toggle"
-              class="icon-button"
-              type="button"
+              class="control icon-button"
+              role="button"
+              tabindex="0"
               title="Play or pause"
               aria-label="Play or pause"
             >
               ▶
-            </button>
-            <button id="mark-in" class="secondary-button" type="button">
+            </div>
+            <div id="mark-in" class="control secondary-button" role="button" tabindex="0">
               <svg class="mark-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M4 4v16M8 12h12M16 8l4 4-4 4" />
               </svg>
               <span>Mark In</span>
-            </button>
-            <button id="mark-out" class="secondary-button" type="button">
+            </div>
+            <div id="mark-out" class="control secondary-button" role="button" tabindex="0">
               <svg class="mark-icon" aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M20 4v16M4 12h12M12 8l4 4-4 4" />
               </svg>
               <span>Mark Out</span>
-            </button>
-            <button id="play-selection" class="secondary-button" type="button">
+            </div>
+            <div id="play-selection" class="control secondary-button" role="button" tabindex="0">
               Play Selection
-            </button>
+            </div>
           </div>
         </section>
 
         <fieldset class="field">
           <legend>Duration</legend>
           <div class="segmented two-columns" role="group" aria-label="Duration">
-            <button id="mode-full" class="segment-button is-selected" type="button" aria-pressed="true">
+            <div id="mode-full" class="control segment-button is-selected" role="button" tabindex="0" aria-pressed="true">
               Full Clip
-            </button>
-            <button id="mode-segment" class="segment-button" type="button" aria-pressed="false">
+            </div>
+            <div id="mode-segment" class="control segment-button" role="button" tabindex="0" aria-pressed="false">
               Segment
-            </button>
+            </div>
           </div>
         </fieldset>
 
@@ -145,30 +146,33 @@
         <fieldset class="field">
           <legend>Output</legend>
           <div class="segmented output-grid" role="group" aria-label="Output type">
-            <button
+            <div
               id="output-video-audio"
-              class="segment-button is-selected"
-              type="button"
+              class="control segment-button is-selected"
+              role="button"
+              tabindex="0"
               aria-pressed="true"
             >
               Video + Audio
-            </button>
-            <button
+            </div>
+            <div
               id="output-audio-only"
-              class="segment-button"
-              type="button"
+              class="control segment-button"
+              role="button"
+              tabindex="0"
               aria-pressed="false"
             >
               Audio Only
-            </button>
-            <button
+            </div>
+            <div
               id="output-video-only"
-              class="segment-button"
-              type="button"
+              class="control segment-button"
+              role="button"
+              tabindex="0"
               aria-pressed="false"
             >
               Video Only
-            </button>
+            </div>
           </div>
         </fieldset>
 
@@ -176,7 +180,7 @@
           <label for="output-folder">Save to</label>
           <div class="folder-row">
             <input id="output-folder" type="text" readonly placeholder="Choose a folder" />
-            <button id="choose-folder" class="secondary-button" type="button">Choose</button>
+            <div id="choose-folder" class="control secondary-button" role="button" tabindex="0">Choose</div>
           </div>
         </div>
 
@@ -190,16 +194,16 @@
         </div>
 
         <div class="action-row">
-          <button id="import-button" class="primary-button" type="submit">
+          <div id="import-button" class="control primary-button" role="button" tabindex="0">
             Download and Import
-          </button>
-          <button id="cancel-button" class="danger-button" type="button" hidden>
+          </div>
+          <div id="cancel-button" class="control danger-button" role="button" tabindex="0" hidden>
             Cancel
-          </button>
+          </div>
         </div>
       </form>
       <footer class="app-footer">
-        <span id="app-version">v0.3.1</span>
+        <span id="app-version">v0.4.0</span>
       </footer>
     </main>
   </body>

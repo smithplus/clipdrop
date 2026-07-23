@@ -3,6 +3,7 @@
 const { execFile } = require("node:child_process");
 const { promisify } = require("node:util");
 const packageJson = require("../../package.json");
+const { resolveBinaryCommands } = require("./binaries");
 
 const execFileAsync = promisify(execFile);
 
@@ -19,9 +20,10 @@ async function checkBinary(command, args) {
 }
 
 async function getHealth(binaryCheck = checkBinary) {
+  const commands = resolveBinaryCommands();
   const [ytDlp, ffmpeg] = await Promise.all([
-    binaryCheck("yt-dlp", ["--version"]),
-    binaryCheck("ffmpeg", ["-version"]),
+    binaryCheck(commands.ytDlp, ["--version"]),
+    binaryCheck(commands.ffmpeg, ["-version"]),
   ]);
   return {
     version: packageJson.version,

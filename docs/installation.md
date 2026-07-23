@@ -2,57 +2,50 @@
 
 ## Compatibility
 
-- Premiere Pro 25.6 or later.
-- macOS arm64/x64 or Windows x64.
-- Node.js 20 or later.
-- yt-dlp, ffmpeg, and ffprobe available on `PATH`.
+- Adobe Premiere Pro 25.6 or later.
+- macOS Apple Silicon for the current `0.4.0` installer.
+- Internet access for YouTube preview and authorized downloads.
+
+Node.js, Homebrew, yt-dlp, ffmpeg, and ffprobe are not required for normal use.
 
 ## macOS
 
-Install the dependencies:
+1. Download `ClipDrop-0.4.0-macOS-arm64.dmg`.
+2. Drag `ClipDrop` to `/Applications`.
+3. Open ClipDrop once. Its icon appears in the macOS menu bar.
+4. Confirm the menu reads `ClipDrop is ready`.
+5. Open Premiere and select `Window > UXP Plugins > ClipDrop`.
+
+ClipDrop registers its bundled `.ccx` through Adobe's UPIA component on the
+first launch of each app version. Creative Cloud Desktop does not need to stay
+open.
+
+The current development build is not signed or notarized. If Gatekeeper blocks
+it, right-click the app, select `Open`, and confirm once. Public production
+releases should be signed and notarized before general distribution.
+
+## Updating
+
+1. Quit ClipDrop from its menu bar menu.
+2. Replace `/Applications/ClipDrop.app` with the newer version.
+3. Open ClipDrop once.
+4. Restart Premiere so it reloads the updated panel.
+
+## Manual Development Install
+
+Developers can build and install the panel without the menu app:
 
 ```sh
-brew install node yt-dlp ffmpeg
-```
-
-Start the Helper:
-
-```sh
-open "helper/install/macos/Start ClipDrop Helper.command"
-```
-
-Double-click `dist/ClipDrop-0.3.1.ccx` to install it. You can also use UPIA:
-
-```sh
+npm run package:plugin
 "/Library/Application Support/Adobe/Adobe Desktop Common/RemoteComponents/UPI/UnifiedPluginInstallerAgent/UnifiedPluginInstallerAgent.app/Contents/MacOS/UnifiedPluginInstallerAgent" \
-  --install "/full/path/ClipDrop-0.3.1.ccx"
+  --install "/full/path/ClipDrop-0.4.0.ccx"
 ```
+
+Run `npm run start:helper` only when developing directly from source. End users
+should run the ClipDrop app instead.
 
 ## Windows
 
-1. Install Node.js, yt-dlp, and ffmpeg.
-2. Confirm `node`, `yt-dlp`, `ffmpeg`, and `ffprobe` work from CMD.
-3. Run `helper\install\windows\Start ClipDrop Helper.cmd`.
-4. Open `dist\ClipDrop-0.3.1.ccx`.
-
-UPIA can also install the package without navigating through Creative Cloud
-Desktop:
-
-```bat
-"%CommonProgramFiles%\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\path\ClipDrop-0.3.1.ccx"
-```
-
-## Open the Panel
-
-1. Open a project in Premiere.
-2. Select `Window > UXP Plugins > ClipDrop`.
-3. Confirm the status reads `Helper ready`.
-
-After updating the `.ccx`, save the project and restart Premiere so the new
-version replaces the plugin already loaded in memory.
-
-## Development
-
-UXP Developer Tool 2.2 or later is required only for `Load & Watch`, debugging,
-and official packaging during development. It is not required to use an
-installed `.ccx`.
+The engine and installer paths are designed for Windows, but a tested Windows
+installer is not published in `0.4.0`. Do not treat the source helper scripts as
+the stable end-user installation.

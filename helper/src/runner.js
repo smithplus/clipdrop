@@ -5,6 +5,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawn } = require("node:child_process");
 const { createDownloadPlan, createConversionPlan } = require("./planner");
+const { resolveBinaryCommands } = require("./binaries");
 
 function parseDownloadProgress(line) {
   const match = line.match(/\[download\]\s+(\d+(?:\.\d+)?)%/);
@@ -25,7 +26,7 @@ function createOutputFileName(job, now = new Date()) {
 function mapProcessError(error, command) {
   if (error.code === "ENOENT") {
     const mapped = new Error(
-      `${command} was not found. Reinstall or repair ClipDrop Helper.`,
+      `${command} was not found. Reinstall ClipDrop.`,
     );
     mapped.code = "BINARY_MISSING";
     return mapped;
@@ -115,7 +116,7 @@ async function findDownloadedSource(workingDirectory) {
   return path.join(workingDirectory, source.name);
 }
 
-async function runMediaJob(job, controls) {
+async function runMediaJob(job, controls, binaries = resolveBinaryCommands()) {
   await fs.mkdir(job.outputDirectory, { recursive: true });
   const workingDirectory = await fs.mkdtemp(path.join(os.tmpdir(), "clipdrop-"));
   const outputPath = path.join(
@@ -125,7 +126,7 @@ async function runMediaJob(job, controls) {
 
   try {
     controls.update({ phase: "download", progress: 1 });
-    const download = createDownloadPlan(job, workingDirectory);
+    const download = createDownloadPlan(job, workingDirectory, binaries);
     const onDownloadLine = (line) => {
       const percentage = parseDownloadProgress(line);
       if (percentage !== null) {
@@ -143,7 +144,12 @@ async function runMediaJob(job, controls) {
 
     const sourcePath = await findDownloadedSource(workingDirectory);
     controls.update({ phase: "convert", progress: 72 });
-    const conversion = createConversionPlan(job, sourcePath, outputPath);
+    const conversion = createConversionPlan(
+      job,
+      sourcePath,
+      outputPath,
+      binaries,
+    );
     await runProcess(conversion.command, conversion.args, {
       signal: controls.signal,
     });

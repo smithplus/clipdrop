@@ -95,7 +95,7 @@ function createApiServer({ manager, getHealth }) {
       }
 
       sendJson(response, 404, {
-        error: { code: "NOT_FOUND", message: "Ruta no encontrada." },
+        error: { code: "NOT_FOUND", message: "Route not found." },
       });
     } catch (error) {
       const status = error.code === "BODY_TOO_LARGE" ? 413 : 400;

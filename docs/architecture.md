@@ -1,17 +1,27 @@
 # Architecture
 
-ClipDrop separates the Premiere-integrated interface from multimedia operations
-that UXP cannot execute directly.
+ClipDrop separates Premiere's UXP interface from multimedia operations that UXP
+cannot execute directly.
 
 ```mermaid
 flowchart LR
-  U["UXP Panel"] -->|"Local HTTP"| H["ClipDrop Helper"]
+  U["UXP Panel"] -->|"Local HTTP"| C["ClipDrop Menu Bar App"]
   U <-->|"Messages"| W["WebView / YouTube Player"]
-  H --> Y["yt-dlp"]
-  H --> F["ffmpeg / ffprobe"]
-  H --> O["Output File"]
+  C --> Y["Bundled yt-dlp"]
+  C --> F["Bundled ffmpeg / ffprobe"]
+  C --> O["Output File"]
   O --> P["Premiere Project"]
 ```
+
+## Menu Bar App
+
+`companion/` is an Electron app with no normal window. It owns the local engine,
+starts at login, exposes status and recovery actions in the macOS menu bar, and
+bundles every executable dependency. The user never starts a separate process
+manually.
+
+On first launch for each version, the app registers the bundled Premiere panel
+through Adobe's UPIA executable.
 
 ## UXP Panel
 
@@ -19,37 +29,32 @@ flowchart LR
 Premiere API integration. The panel requests access only to the selected folder
 and the domains declared in `manifest.json`.
 
+The custom controls avoid native UXP button styling differences while retaining
+keyboard activation, focus, pressed state, and disabled state.
+
 ## Preview
 
 `plugin/preview/` loads the official YouTube API inside a local WebView. The
-player retains YouTube controls, branding, and restrictions.
+player retains YouTube controls, branding, and restrictions. The panel owns the
+canonical selection in seconds.
 
-The panel and WebView exchange versioned messages. The panel owns the canonical
-selection in seconds; the preview does not determine final trimming precision.
+## Local Engine
 
-## Helper
-
-`helper/` exposes an HTTP API at `127.0.0.1:47821`. It validates requests,
-creates jobs, runs yt-dlp and ffmpeg, and reports progress. Job routes require
-the `x-clipdrop-client` header.
+`helper/` contains the reusable engine modules. The companion app loads them
+inside its own process and exposes an HTTP API only at `127.0.0.1:47821`. Job
+routes require the `x-clipdrop-client` header.
 
 ## Conversion
 
 - Video with audio: H.264/AAC MP4.
-- Audio: 48 kHz WAV.
-- Video without audio: H.264 MP4.
+- Audio only: 48 kHz WAV.
+- Video only: H.264 MP4.
 
-ffmpeg applies the numeric In and Out values so the final file does not depend
-on the preview's seek keyframe.
+ffmpeg applies the numeric In and Out values so the final cut does not depend on
+the preview's seek keyframe.
 
 ## Import
 
 The panel creates or reuses `ClipDrop Imports`. Creation uses
 `project.lockedAccess()` and a transaction, while `Project.importFiles()`
-imports the output file.
-
-## Future Distribution
-
-The standalone release will bundle the Helper and multimedia tools, register a
-per-user service, and use UPIA to install the panel. See
-`docs/superpowers/specs/2026-07-23-clipdrop-standalone-distribution-design.md`.
+imports the completed file.

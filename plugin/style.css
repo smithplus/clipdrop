@@ -30,20 +30,30 @@ body {
   letter-spacing: 0;
 }
 
-button,
+.control,
 input,
 output {
   font: inherit;
   letter-spacing: 0;
 }
 
-button {
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  user-select: none;
 }
 
-button:disabled {
+.control.is-disabled {
   cursor: default;
   opacity: 0.5;
+  pointer-events: none;
+}
+
+.control:focus {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .app-shell {
@@ -73,7 +83,7 @@ h1 {
   font-size: 11px;
 }
 
-.helper-status {
+.engine-status {
   display: flex;
   min-width: 0;
   align-items: center;

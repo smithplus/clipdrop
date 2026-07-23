@@ -110,6 +110,33 @@ test("panel stylesheet only uses layout modes supported by Premiere UXP", () => 
   }
 });
 
+test("panel uses custom controls instead of native UXP buttons", () => {
+  const html = fs.readFileSync(path.join(pluginRoot, "index.html"), "utf8");
+
+  assert.doesNotMatch(html, /<button\b/);
+  for (const id of [
+    "accept-notice",
+    "load-preview",
+    "preview-toggle",
+    "mark-in",
+    "mark-out",
+    "play-selection",
+    "mode-full",
+    "mode-segment",
+    "output-video-audio",
+    "output-audio-only",
+    "output-video-only",
+    "choose-folder",
+    "import-button",
+    "cancel-button",
+  ]) {
+    assert.match(
+      html,
+      new RegExp(`id="${id}"[^>]+class="[^"]*control[^"]*"[^>]+role="button"`),
+    );
+  }
+});
+
 test("local preview page loads the official YouTube player API", () => {
   const html = fs.readFileSync(
     path.join(pluginRoot, "preview", "player.html"),

@@ -30,8 +30,31 @@ function setGroupSelection(buttons, selected) {
   }
 }
 
+function setControlDisabled(control, disabled) {
+  control.classList.toggle("is-disabled", disabled);
+  control.setAttribute("aria-disabled", String(disabled));
+  control.tabIndex = disabled ? -1 : 0;
+}
+
+function bindControl(control, handler) {
+  const activate = (event) => {
+    if (control.classList.contains("is-disabled")) {
+      return;
+    }
+    handler(event);
+  };
+  control.addEventListener("click", activate);
+  control.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    event.preventDefault();
+    activate(event);
+  });
+}
+
 function setBusy(isBusy) {
-  document.getElementById("import-button").disabled = isBusy;
+  setControlDisabled(document.getElementById("import-button"), isBusy);
   document.getElementById("cancel-button").hidden = !isBusy;
 }
 
@@ -111,7 +134,7 @@ function handlePreviewEvent(data) {
   if (event.type === "metadata") {
     selection.setDuration(event.durationSeconds);
     renderSelection();
-    document.getElementById("load-preview").disabled = false;
+    setControlDisabled(document.getElementById("load-preview"), false);
     showMessage("Preview ready.", "success");
     return;
   }
@@ -124,7 +147,7 @@ function handlePreviewEvent(data) {
     return;
   }
   if (event.type === "error") {
-    document.getElementById("load-preview").disabled = false;
+    setControlDisabled(document.getElementById("load-preview"), false);
     showMessage(event.message, "error");
   }
 }
@@ -134,7 +157,7 @@ function loadPreview() {
     document.getElementById("source-url").value.trim(),
   );
   document.getElementById("preview-section").hidden = false;
-  document.getElementById("load-preview").disabled = true;
+  setControlDisabled(document.getElementById("load-preview"), true);
   showMessage("Loading preview...");
   if (previewReady) {
     sendPreview("load", { videoId: previewVideoId });
@@ -163,21 +186,21 @@ function renderState(state) {
   const progressLabel = document.getElementById("progress-label");
   const progressValue = document.getElementById("progress-value");
   const dot = document.getElementById("status-dot");
-  const helperLabel = document.getElementById("helper-label");
+  const connectionLabel = document.getElementById("connection-label");
 
   if (state.kind === "health") {
     const ready = state.health.ready;
     dot.className = `status-dot ${ready ? "is-online" : "is-offline"}`;
-    helperLabel.textContent = ready ? "Helper ready" : "Components missing";
+    connectionLabel.textContent = ready ? "Ready" : "Unavailable";
     if (!ready) {
-      showMessage("Repair ClipDrop Helper to install yt-dlp and ffmpeg.", "error");
+      showMessage("Restart ClipDrop from the menu bar.", "error");
     }
     return;
   }
   if (state.kind === "health-error") {
     dot.className = "status-dot is-offline";
-    helperLabel.textContent = "Helper disconnected";
-    showMessage(state.error.message, "error");
+    connectionLabel.textContent = "Unavailable";
+    showMessage("Open ClipDrop from the menu bar.", "error");
     return;
   }
   if (state.kind === "job") {
@@ -222,6 +245,23 @@ async function chooseOutputFolder() {
   localStorage.setItem("clipdrop.outputDirectory", nativePath);
 }
 
+function submitJob() {
+  try {
+    const payload = buildJobPayload({
+      url: document.getElementById("source-url").value,
+      mode,
+      startTime: document.getElementById("start-time").value,
+      endTime: document.getElementById("end-time").value,
+      outputKind,
+      outputDirectory: document.getElementById("output-folder").value,
+    });
+    setBusy(true);
+    controller.submit(payload).catch(() => {});
+  } catch (error) {
+    showMessage(error.message, "error");
+  }
+}
+
 function initialize() {
   if (initialized) {
     return;
@@ -235,14 +275,12 @@ function initialize() {
     onState: renderState,
   });
 
-  document
-    .getElementById("mode-full")
-    .addEventListener("click", () => setDurationMode("full"));
-  document
-    .getElementById("mode-segment")
-    .addEventListener("click", () => setDurationMode("segment"));
+  bindControl(document.getElementById("mode-full"), () =>
+    setDurationMode("full"));
+  bindControl(document.getElementById("mode-segment"), () =>
+    setDurationMode("segment"));
 
-  document.getElementById("load-preview").addEventListener("click", () => {
+  bindControl(document.getElementById("load-preview"), () => {
     try {
       loadPreview();
     } catch (error) {
@@ -285,23 +323,23 @@ function initialize() {
     });
   });
 
-  document.getElementById("mark-in").addEventListener("click", () => {
+  bindControl(document.getElementById("mark-in"), () => {
     selection.markIn();
     setDurationMode("segment");
     renderSelection();
   });
-  document.getElementById("mark-out").addEventListener("click", () => {
+  bindControl(document.getElementById("mark-out"), () => {
     selection.markOut();
     setDurationMode("segment");
     renderSelection();
   });
-  document.getElementById("play-selection").addEventListener("click", () => {
+  bindControl(document.getElementById("play-selection"), () => {
     sendPreview("playSelection", {
       inSeconds: selection.inSeconds,
       outSeconds: selection.outSeconds,
     });
   });
-  document.getElementById("preview-toggle").addEventListener("click", () => {
+  bindControl(document.getElementById("preview-toggle"), () => {
     sendPreview(previewPlayerState === 1 ? "pause" : "play");
   });
 
@@ -326,7 +364,7 @@ function initialize() {
   ];
   const outputValues = ["video_audio", "audio_only", "video_only"];
   outputButtons.forEach((button, index) => {
-    button.addEventListener("click", () => {
+    bindControl(button, () => {
       outputKind = outputValues[index];
       setGroupSelection(outputButtons, button);
     });
@@ -336,40 +374,29 @@ function initialize() {
   if (savedFolder) {
     document.getElementById("output-folder").value = savedFolder;
   }
-  document
-    .getElementById("choose-folder")
-    .addEventListener("click", () => chooseOutputFolder().catch((error) => {
+  bindControl(
+    document.getElementById("choose-folder"),
+    () => chooseOutputFolder().catch((error) => {
       showMessage(error.message, "error");
-    }));
+    }),
+  );
 
   const legalNotice = document.getElementById("legal-notice");
   legalNotice.hidden = localStorage.getItem("clipdrop.legalAccepted") === "true";
-  document.getElementById("accept-notice").addEventListener("click", () => {
+  bindControl(document.getElementById("accept-notice"), () => {
     localStorage.setItem("clipdrop.legalAccepted", "true");
     legalNotice.hidden = true;
   });
 
-  document.getElementById("cancel-button").addEventListener("click", () => {
+  bindControl(document.getElementById("cancel-button"), () => {
     controller.cancel().catch((error) => showMessage(error.message, "error"));
   });
 
   document.getElementById("clip-form").addEventListener("submit", (event) => {
     event.preventDefault();
-    try {
-      const payload = buildJobPayload({
-        url: document.getElementById("source-url").value,
-        mode,
-        startTime: document.getElementById("start-time").value,
-        endTime: document.getElementById("end-time").value,
-        outputKind,
-        outputDirectory: document.getElementById("output-folder").value,
-      });
-      setBusy(true);
-      controller.submit(payload).catch(() => {});
-    } catch (error) {
-      showMessage(error.message, "error");
-    }
+    submitJob();
   });
+  bindControl(document.getElementById("import-button"), submitJob);
 
   controller.checkHealth().catch(() => {});
   renderSelection();

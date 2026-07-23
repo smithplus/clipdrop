@@ -1,20 +1,13 @@
 # Troubleshooting
 
-## Helper Disconnected
+## ClipDrop Is Unavailable
 
-Check:
+1. Select the ClipDrop icon in the macOS menu bar.
+2. Select `Restart ClipDrop`.
+3. Confirm the menu reads `ClipDrop is ready`.
+4. Reopen the panel in Premiere.
 
-```sh
-curl http://127.0.0.1:47821/health
-```
-
-A healthy response contains `"ready": true`. If it does not respond:
-
-- macOS: open `helper/install/macos/Start ClipDrop Helper.command`.
-- Windows: open `helper\install\windows\Start ClipDrop Helper.cmd`.
-- Confirm port `47821` is not already in use.
-
-If it responds with `ready: false`, yt-dlp or ffmpeg is missing from `PATH`.
+Use `Open Logs` from the same menu when restart does not recover the app.
 
 ## Preview Does Not Load
 
@@ -27,9 +20,12 @@ If it responds with `ready: false`, yt-dlp or ffmpeg is missing from `PATH`.
 ## ClipDrop Does Not Appear in Premiere
 
 1. Confirm Premiere is version 25.6 or later.
-2. Reinstall the `.ccx`.
+2. Quit and reopen ClipDrop so it can register the bundled panel.
 3. Save the project and restart Premiere.
 4. Open `Window > UXP Plugins > ClipDrop`.
+
+For development builds, install `dist/ClipDrop-0.4.0.ccx` manually with UPIA as
+described in [Installation](installation.md).
 
 ## Download Succeeds but Import Fails
 
@@ -41,11 +37,9 @@ If it responds with `ready: false`, yt-dlp or ffmpeg is missing from `PATH`.
 
 ## Logs
 
-macOS:
+ClipDrop logs are available through `Open Logs` in the menu bar menu. Premiere
+UXP logs are stored at:
 
 ```text
 ~/Library/Logs/Adobe/Adobe Premiere Pro 2026/UXPLogs_*.log
 ```
-
-The Helper writes to the terminal that started it. The standalone release will
-write its own logs under `~/Library/Logs/ClipDrop`.

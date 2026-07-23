@@ -21,18 +21,18 @@ class HelperClient {
       });
     } catch {
       const error = new Error(
-        "ClipDrop Helper is unavailable. Open or reinstall the Helper.",
+        "ClipDrop is unavailable. Open ClipDrop from the menu bar.",
       );
-      error.code = "HELPER_OFFLINE";
+      error.code = "CLIPDROP_OFFLINE";
       throw error;
     }
 
     const body = await response.json();
     if (!response.ok) {
       const error = new Error(
-        body.error?.message || `The Helper responded with status ${response.status}.`,
+        body.error?.message || `ClipDrop responded with status ${response.status}.`,
       );
-      error.code = body.error?.code || "HELPER_ERROR";
+      error.code = body.error?.code || "CLIPDROP_ERROR";
       throw error;
     }
     return body;

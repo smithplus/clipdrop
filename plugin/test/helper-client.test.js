@@ -46,7 +46,7 @@ test("HelperClient surfaces structured helper errors", async () => {
   );
 });
 
-test("HelperClient explains connection failures", async () => {
+test("HelperClient explains connection failures without exposing internals", async () => {
   const client = new HelperClient({
     fetchImpl: async () => {
       throw new TypeError("Failed to fetch");
@@ -55,6 +55,9 @@ test("HelperClient explains connection failures", async () => {
 
   await assert.rejects(
     () => client.health(),
-    (error) => error.code === "HELPER_OFFLINE" && /Helper/i.test(error.message),
+    (error) =>
+      error.code === "CLIPDROP_OFFLINE" &&
+      /open ClipDrop from the menu bar/i.test(error.message) &&
+      !/helper|node|ffmpeg|yt-dlp/i.test(error.message),
   );
 });

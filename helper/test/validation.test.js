@@ -14,9 +14,29 @@ const validRequest = {
 test("validateJobRequest normalizes a full clip request", () => {
   assert.deepEqual(validateJobRequest(validRequest), {
     ...validRequest,
+    quality: "best",
+    compat: false,
     startSeconds: null,
     endSeconds: null,
   });
+});
+
+test("validateJobRequest keeps an explicit quality and compat flag", () => {
+  const result = validateJobRequest({
+    ...validRequest,
+    quality: "1080",
+    compat: true,
+  });
+
+  assert.equal(result.quality, "1080");
+  assert.equal(result.compat, true);
+});
+
+test("validateJobRequest rejects an unknown quality", () => {
+  assert.throws(
+    () => validateJobRequest({ ...validRequest, quality: "8k" }),
+    /quality/i,
+  );
 });
 
 test("validateJobRequest normalizes segment times", () => {

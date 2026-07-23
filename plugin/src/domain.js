@@ -1,7 +1,7 @@
 "use strict";
 
 const PHASE_LABELS = {
-  queued: "En cola",
+  queued: "Queued",
   metadata: "Checking link",
   download: "Downloading",
   convert: "Preparing for Premiere",
@@ -9,6 +9,8 @@ const PHASE_LABELS = {
   cancelled: "Cancelled",
   failed: "Could not complete",
 };
+
+const QUALITIES = new Set(["best", "2160", "1440", "1080", "720", "480"]);
 
 function timeToSeconds(value) {
   if (typeof value !== "string" || !/^\d+(?::\d+(?:\.\d+)?){0,2}$/.test(value)) {
@@ -38,6 +40,8 @@ function buildJobPayload(form) {
     url,
     mode: form.mode,
     outputKind: form.outputKind,
+    quality: QUALITIES.has(form.quality) ? form.quality : "best",
+    compat: Boolean(form.compat),
     outputDirectory,
   };
 
@@ -63,7 +67,7 @@ function buildJobPayload(form) {
 }
 
 function phaseLabel(phase) {
-  return PHASE_LABELS[phase] || "Procesando";
+  return PHASE_LABELS[phase] || "Working";
 }
 
 module.exports = { buildJobPayload, phaseLabel, timeToSeconds };

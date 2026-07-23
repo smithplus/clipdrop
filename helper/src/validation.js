@@ -5,6 +5,8 @@ const { parseTime } = require("./time");
 
 const MODES = new Set(["full", "segment"]);
 const OUTPUT_KINDS = new Set(["video_audio", "audio_only", "video_only"]);
+const QUALITIES = new Set(["best", "2160", "1440", "1080", "720", "480"]);
+const DEFAULT_QUALITY = "best";
 const YOUTUBE_HOSTS = new Set([
   "youtube.com",
   "www.youtube.com",
@@ -44,6 +46,11 @@ function validateJobRequest(request) {
   if (!OUTPUT_KINDS.has(request.outputKind)) {
     throw new TypeError("The output type is invalid.");
   }
+  const quality = request.quality === undefined ? DEFAULT_QUALITY : request.quality;
+  if (!QUALITIES.has(quality)) {
+    throw new TypeError("The quality is invalid.");
+  }
+  const compat = Boolean(request.compat);
   if (
     typeof request.outputDirectory !== "string" ||
     !isAbsolutePath(request.outputDirectory)
@@ -63,6 +70,8 @@ function validateJobRequest(request) {
 
   return {
     ...request,
+    quality,
+    compat,
     startSeconds,
     endSeconds,
   };

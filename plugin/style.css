@@ -312,6 +312,41 @@ input[readonly] {
   color: var(--muted);
 }
 
+.quality-select {
+  width: 100%;
+  height: 32px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  outline: none;
+  background: #171719;
+  color: var(--text);
+  padding: 0 9px;
+}
+
+.quality-select:focus {
+  border-color: var(--accent);
+}
+
+.checkbox-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox-field input {
+  width: 16px;
+  height: 16px;
+  margin: 0 8px 0 0;
+  flex: 0 0 auto;
+}
+
+.checkbox-field label {
+  margin: 0;
+  color: var(--text);
+  font-weight: 400;
+}
+
 .segmented {
   display: flex;
   width: 100%;

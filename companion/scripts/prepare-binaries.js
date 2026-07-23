@@ -60,12 +60,34 @@ function copyBinary(source, name) {
   fs.chmodSync(target, 0o755);
 }
 
+function assertArchIsBuildable() {
+  const targetArch = process.env.CLIPDROP_TARGET_ARCH || process.arch;
+  // yt-dlp_macos is a universal binary, but ffmpeg-static and
+  // @ffprobe-installer only provide the host architecture. Cross-bundling
+  // (for example an x64 app from an Apple Silicon mac) would ship the wrong
+  // ffmpeg, so fail loudly instead of producing a broken build.
+  if (
+    process.platform === "darwin" &&
+    targetArch !== process.arch
+  ) {
+    throw new Error(
+      `Cannot bundle ffmpeg for ${targetArch} on a ${process.arch} host. ` +
+        `Build the ${targetArch} app on a matching mac, or provide ${targetArch} ` +
+        `ffmpeg and ffprobe binaries in ${binaryRoot}.`,
+    );
+  }
+  return targetArch;
+}
+
 async function main() {
+  const targetArch = assertArchIsBuildable();
   fs.mkdirSync(binaryRoot, { recursive: true });
   copyBinary(require("ffmpeg-static"), "ffmpeg");
   copyBinary(require("@ffprobe-installer/ffprobe").path, "ffprobe");
   await prepareYtDlp();
-  console.log(`Prepared ClipDrop media tools in ${binaryRoot}`);
+  console.log(
+    `Prepared ClipDrop media tools for ${process.platform}/${targetArch} in ${binaryRoot}`,
+  );
 }
 
 main().catch((error) => {

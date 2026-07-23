@@ -253,6 +253,8 @@ function submitJob() {
       startTime: document.getElementById("start-time").value,
       endTime: document.getElementById("end-time").value,
       outputKind,
+      quality: document.getElementById("quality-select").value,
+      compat: document.getElementById("compat-toggle").checked,
       outputDirectory: document.getElementById("output-folder").value,
     });
     setBusy(true);
@@ -374,6 +376,15 @@ function initialize() {
   if (savedFolder) {
     document.getElementById("output-folder").value = savedFolder;
   }
+
+  const qualitySelect = document.getElementById("quality-select");
+  const savedQuality = localStorage.getItem("clipdrop.quality");
+  if (savedQuality) {
+    qualitySelect.value = savedQuality;
+  }
+  qualitySelect.addEventListener("change", () => {
+    localStorage.setItem("clipdrop.quality", qualitySelect.value);
+  });
   bindControl(
     document.getElementById("choose-folder"),
     () => chooseOutputFolder().catch((error) => {

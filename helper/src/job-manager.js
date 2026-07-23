@@ -22,6 +22,9 @@ class JobManager {
     }
     this.runJob = runJob;
     this.jobs = new Map();
+    // Serializes execution so concurrent submissions never compete for CPU and
+    // disk. Each job waits its turn; execute() skips any cancelled beforehand.
+    this.tail = Promise.resolve();
   }
 
   create(request) {
@@ -41,7 +44,7 @@ class JobManager {
       controller: new AbortController(),
     };
     this.jobs.set(job.id, job);
-    queueMicrotask(() => this.execute(job));
+    this.tail = this.tail.then(() => this.execute(job)).catch(() => {});
     return publicJob(job);
   }
 

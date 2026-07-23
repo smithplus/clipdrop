@@ -13,11 +13,18 @@ segment, and import it into the open project.
 
 - Preview through the official YouTube player.
 - Timeline with a playhead and In/Out markers.
-- Full clip or precise selected segment.
+- Full clip or precise selected segment. A segment downloads only its window,
+  so a short clip from a long video no longer downloads the whole video.
+- Resolution selection (Best, 2160p, 1440p, 1080p, 720p, 480p), preferring
+  H.264 up to 1080p so most clips remux without a slow re-encode.
+- Optional "maximum compatibility" mode that always re-encodes.
 - Video with audio, WAV audio, or video without audio.
 - Premiere-friendly H.264/AAC and 48 kHz WAV output.
+- Clear, specific messages when YouTube blocks a download (private, region,
+  rate-limited, or downloader out of date).
 - Automatic import into `ClipDrop Imports`.
-- Menu bar status, restart, logs, and launch-at-login controls.
+- Menu bar status, restart, logs, launch-at-login, and a "Check for Updates"
+  action that refreshes the yt-dlp media engine.
 - Local-only communication on `127.0.0.1`.
 
 ## Install on macOS
@@ -41,8 +48,10 @@ installation.
 1. Paste a public YouTube link that you are authorized to download.
 2. Select `Preview`.
 3. Mark In and Out on the timeline, use the controls, or enter the times.
-4. Choose `Video + Audio`, `Audio Only`, or `Video Only`, then select a folder.
-5. Select `Download and Import`.
+4. Choose `Video + Audio`, `Audio Only`, or `Video Only`.
+5. Pick a `Quality`. Leave `maximum compatibility` off unless a clip refuses to
+   import, then select a folder.
+6. Select `Download and Import`.
 
 Time fields accept seconds, `MM:SS`, and `HH:MM:SS`. Manual selection remains
 available when a video blocks embedded playback.
@@ -53,12 +62,15 @@ available when a video blocks embedded playback.
 npm test
 npm run package:plugin
 npm install --prefix companion
-npm run build:mac
+npm run build:mac                       # Apple Silicon (arm64) DMG + zip
+npm --prefix companion run build:mac:x64 # Intel build (run on an Intel mac)
+npm --prefix companion run build:win     # Windows nsis installer
 ```
 
 The suite covers the menu app, bundled binary resolution, local API, jobs,
-conversion, Premiere integration, In/Out selection, preview messages, and
-packaging.
+conversion, format and quality selection, stream-copy remux, the yt-dlp
+updater, the notarization hook, Premiere integration, In/Out selection,
+preview messages, and packaging.
 
 ## Developer and AI Agent Handoff
 
@@ -78,7 +90,7 @@ linked below remain authoritative when they cover a topic more deeply.
 - Local API: `http://127.0.0.1:47821`.
 - Premiere plugin ID: `com.clipdrop.premiere`.
 - Companion app ID: `com.clipdrop.companion`.
-- Automated suite at this handoff: 76 tests.
+- Automated suite at this handoff: 105 tests.
 - Windows runtime paths exist, but no tested Windows installer is published.
 - The macOS app is not Developer ID signed or Apple notarized.
 
@@ -95,7 +107,7 @@ be repeated when development resumes.
 | `plugin/src/` | Testable panel domain and Premiere integration modules | `domain.js`, `controller.js`, `premiere.js`, `helper-client.js` |
 | `plugin/preview/` | Local WebView and official YouTube IFrame API integration | `player.html`, `player.js`, `player-config.js` |
 | `helper/` | Reusable local API, validation, job execution, and media conversion | `server.js`, `job-manager.js`, `runner.js`, `planner.js` |
-| `companion/` | Electron menu bar app, bundled engine lifecycle, UPIA registration, and DMG build | `src/main.js`, `src/engine.js`, `src/plugin-installer.js` |
+| `companion/` | Electron menu bar app, bundled engine lifecycle, UPIA registration, yt-dlp updates, and DMG build | `src/main.js`, `src/engine.js`, `src/plugin-installer.js`, `src/updater.js`, `scripts/notarize.js` |
 | `scripts/` | Root packaging utilities | `package-plugin.js` |
 | `dist/` | Versioned `.ccx` panel artifacts committed for direct access | `ClipDrop-<version>.ccx` |
 | `docs/` | Architecture, installation, troubleshooting, validation, and approved designs | See the documentation index below |
@@ -108,15 +120,23 @@ not the stable end-user experience. End users run the ClipDrop companion app.
 1. The UXP panel loads `plugin:/preview/player.html` in a WebView.
 2. The WebView uses the official YouTube IFrame API for preview and sends
    versioned metadata/time events to the panel.
-3. The panel sends a validated job to the companion app over local HTTP.
-4. `JobManager` runs one job with progress and cancellation state.
-5. Bundled `yt-dlp` retrieves the authorized source media.
-6. Bundled `ffmpeg` creates H.264/AAC MP4, H.264 video-only MP4, or 48 kHz WAV.
+3. The panel sends a validated job (URL, mode, output kind, quality, compat)
+   to the companion app over local HTTP.
+4. `JobManager` serializes jobs, running one at a time with progress and
+   cancellation state while the rest wait in `queued`.
+5. Bundled `yt-dlp` retrieves the authorized source media at the requested
+   resolution. For a segment it downloads only the selected window with
+   `--download-sections` and `--force-keyframes-at-cuts`.
+6. `ffprobe` inspects the source. When it is already H.264/AAC (and `compat`
+   is off), bundled `ffmpeg` remuxes with a stream copy; otherwise it
+   re-encodes to H.264/AAC MP4, H.264 video-only MP4, or 48 kHz WAV.
 7. The panel imports the completed file into the `ClipDrop Imports` Premiere
    bin through `Project.importFiles()`.
 
-The preview is for selection only. Numeric In and Out seconds are authoritative
-and ffmpeg performs the final trim.
+The preview is for selection only. Numeric In and Out seconds are
+authoritative: yt-dlp cuts the segment to those keyframe-accurate boundaries
+during download, so a short clip from a long video no longer downloads the
+whole video.
 
 ### Non-Negotiable Invariants
 
@@ -257,13 +277,22 @@ automatically when an editor may have unsaved work.
 
 ### Known Constraints and Follow-Up Work
 
-- macOS builds are currently Apple Silicon only.
-- Signing, notarization, and a tested Windows installer remain unfinished.
+- Signing and notarization are wired in `companion/package.json`
+  (`hardenedRuntime`, `build/entitlements.mac.plist`) and the
+  `scripts/notarize.js` afterSign hook, which activates only when `APPLE_ID`,
+  `APPLE_APP_SPECIFIC_PASSWORD`, and `APPLE_TEAM_ID` are set. A signing
+  certificate (`CSC_LINK`/`CSC_KEY_PASSWORD`) and those secrets must be
+  provided on the build machine or in CI to produce a Gatekeeper-clean app.
+- The macOS build targets `arm64` and `x64`, but `prepare:binaries` bundles
+  host-architecture ffmpeg/ffprobe (`ffmpeg-static` ships only the host arch),
+  so the `x64` DMG must be built on an Intel mac or supplied with `x64`
+  ffmpeg/ffprobe. `yt-dlp_macos` is already universal. The script now fails
+  loudly on a cross-architecture mismatch instead of shipping the wrong binary.
+- The Windows `nsis` target exists but is not yet validated on a real Windows
+  machine with Premiere.
 - Some YouTube videos legitimately disable embedded playback.
 - The panel must remain usable with manual Start and End fields when preview
   fails.
-- `plugin/src/domain.js` still contains two Spanish fallback phase labels
-  (`En cola` and `Procesando`) that should be translated in the next UI cleanup.
 
 The next requested feature is an output destination mode that defaults to:
 

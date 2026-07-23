@@ -15,6 +15,7 @@ function createTrayMenuTemplate({ status, launchAtLogin, actions }) {
     { type: "separator" },
     { label: "Open Logs", click: actions.openLogs },
     { label: "Restart ClipDrop", click: actions.restart },
+    { label: "Check for Updates", click: actions.checkForUpdates },
     { type: "separator" },
     {
       label: "Launch at Login",

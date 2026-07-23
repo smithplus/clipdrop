@@ -50,6 +50,8 @@ test("panel markup contains every primary workflow control", () => {
     "output-video-audio",
     "output-audio-only",
     "output-video-only",
+    "quality-select",
+    "compat-toggle",
     "choose-folder",
     "import-button",
     "cancel-button",

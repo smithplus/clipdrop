@@ -13,6 +13,11 @@ const { resolveRuntimePaths } = require("./config");
 const { startClipDropEngine } = require("./engine");
 const { installBundledPlugin } = require("./plugin-installer");
 const { createTrayMenuTemplate } = require("./tray-menu");
+const { pickYtDlpPath, targetName, updateYtDlp } = require("./updater");
+
+function userBinDir() {
+  return path.join(app.getPath("userData"), "bin");
+}
 
 let tray = null;
 let engine = null;
@@ -60,6 +65,12 @@ async function startEngine() {
     resourcesPath: process.resourcesPath,
     repositoryRoot,
   });
+  // Prefer a verified yt-dlp the user installed through "Check for Updates".
+  paths.ytDlp = pickYtDlpPath({
+    bundled: paths.ytDlp,
+    updated: path.join(userBinDir(), targetName()),
+    exists: fs.existsSync,
+  });
   engine = await startClipDropEngine({ paths });
   const health = await fetch("http://127.0.0.1:47821/health").then((response) =>
     response.json());
@@ -76,6 +87,18 @@ async function restart() {
     log("Could not restart ClipDrop", error);
     renderMenu();
   }
+}
+
+async function checkForUpdates() {
+  status = "starting";
+  renderMenu();
+  try {
+    const { installedPath } = await updateYtDlp({ userBinDir: userBinDir() });
+    log(`Updated the media engine at ${installedPath}`);
+  } catch (error) {
+    log("Could not update the media engine", error);
+  }
+  await restart();
 }
 
 async function quit() {
@@ -99,6 +122,7 @@ function renderMenu() {
         actions: {
           openLogs: () => shell.openPath(path.dirname(logFile)),
           restart,
+          checkForUpdates,
           setLaunchAtLogin,
           quit,
         },

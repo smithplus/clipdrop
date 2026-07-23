@@ -18,8 +18,20 @@ test("buildJobPayload creates a full clip request", () => {
     url: form.url,
     mode: "full",
     outputKind: "video_audio",
+    quality: "best",
+    compat: false,
     outputDirectory: form.outputDirectory,
   });
+});
+
+test("buildJobPayload carries the chosen quality and compat flag", () => {
+  const payload = buildJobPayload({ ...form, quality: "1080", compat: true });
+  assert.equal(payload.quality, "1080");
+  assert.equal(payload.compat, true);
+});
+
+test("buildJobPayload falls back to best for an unknown quality", () => {
+  assert.equal(buildJobPayload({ ...form, quality: "8k" }).quality, "best");
 });
 
 test("buildJobPayload includes both times for a segment", () => {
@@ -36,6 +48,8 @@ test("buildJobPayload includes both times for a segment", () => {
       startTime: "00:10",
       endTime: "01:30.5",
       outputKind: "video_audio",
+      quality: "best",
+      compat: false,
       outputDirectory: form.outputDirectory,
     },
   );
@@ -75,5 +89,6 @@ test("buildJobPayload rejects a reversed segment", () => {
 test("phaseLabel translates helper phases for the editor", () => {
   assert.equal(phaseLabel("download"), "Downloading");
   assert.equal(phaseLabel("convert"), "Preparing for Premiere");
-  assert.equal(phaseLabel("unknown"), "Procesando");
+  assert.equal(phaseLabel("queued"), "Queued");
+  assert.equal(phaseLabel("unknown"), "Working");
 });

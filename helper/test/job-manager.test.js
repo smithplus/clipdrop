@@ -77,6 +77,67 @@ test("JobManager cancels an active job", async () => {
   assert.equal(manager.get(created.id).phase, "cancelled");
 });
 
+test("JobManager runs one job at a time and queues the rest", async () => {
+  const started = [];
+  let releaseFirst;
+  const manager = new JobManager({
+    runJob: (job) =>
+      new Promise((resolve) => {
+        started.push(job.id);
+        if (started.length === 1) {
+          releaseFirst = () => resolve("/tmp/first.mp4");
+        } else {
+          resolve("/tmp/other.mp4");
+        }
+      }),
+  });
+
+  const first = manager.create(request);
+  const second = manager.create(request);
+  await nextTurn();
+
+  assert.equal(started.length, 1);
+  assert.equal(manager.get(first.id).status, "running");
+  assert.equal(manager.get(second.id).status, "queued");
+
+  releaseFirst();
+  for (let i = 0; i < 20 && manager.get(second.id).status !== "completed"; i++) {
+    await nextTurn();
+  }
+
+  assert.equal(manager.get(first.id).status, "completed");
+  assert.equal(manager.get(second.id).status, "completed");
+  assert.deepEqual(started, [first.id, second.id]);
+});
+
+test("JobManager skips a job that was cancelled while queued", async () => {
+  let releaseFirst;
+  const started = [];
+  const manager = new JobManager({
+    runJob: (job) =>
+      new Promise((resolve) => {
+        started.push(job.id);
+        releaseFirst = () => resolve("/tmp/first.mp4");
+      }),
+  });
+
+  const first = manager.create(request);
+  const second = manager.create(request);
+  await nextTurn();
+
+  assert.equal(manager.cancel(second.id), true);
+  assert.equal(manager.get(second.id).status, "cancelled");
+
+  releaseFirst();
+  for (let i = 0; i < 20 && manager.get(first.id).status !== "completed"; i++) {
+    await nextTurn();
+  }
+
+  assert.equal(manager.get(first.id).status, "completed");
+  // The cancelled job never reached runJob.
+  assert.deepEqual(started, [first.id]);
+});
+
 test("JobManager rejects unknown job ids", () => {
   const manager = new JobManager({ runJob: async () => "/tmp/file.mp4" });
   assert.equal(manager.get("missing"), null);

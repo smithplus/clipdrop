@@ -177,6 +177,23 @@
         </fieldset>
 
         <div class="field">
+          <label for="quality-select">Quality</label>
+          <select id="quality-select" class="quality-select">
+            <option value="best">Best available</option>
+            <option value="2160">2160p (4K)</option>
+            <option value="1440">1440p</option>
+            <option value="1080" selected>1080p (fastest)</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+          </select>
+        </div>
+
+        <div class="field checkbox-field">
+          <input id="compat-toggle" type="checkbox" />
+          <label for="compat-toggle">Always re-encode for maximum compatibility</label>
+        </div>
+
+        <div class="field">
           <label for="output-folder">Save to</label>
           <div class="folder-row">
             <input id="output-folder" type="text" readonly placeholder="Choose a folder" />

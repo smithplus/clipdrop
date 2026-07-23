@@ -14,9 +14,12 @@ async function getOrCreateImportBin(project) {
     return target;
   }
 
-  const succeeded = project.executeTransaction((compoundAction) => {
-    compoundAction.addAction(root.createBinAction(IMPORT_BIN_NAME, false));
-  }, "Crear carpeta ClipDrop Imports");
+  let succeeded = false;
+  project.lockedAccess(() => {
+    succeeded = project.executeTransaction((compoundAction) => {
+      compoundAction.addAction(root.createBinAction(IMPORT_BIN_NAME, false));
+    }, "Crear carpeta ClipDrop Imports");
+  });
   if (!succeeded) {
     throw new Error("Premiere no pudo crear la carpeta ClipDrop Imports.");
   }

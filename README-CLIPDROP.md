@@ -22,11 +22,16 @@ oficiales o con el gestor de paquetes habitual del equipo.
 
 ## Probar en macOS
 
+Para probar el paquete ya instalado en esta Mac:
+
 1. Abre `helper/install/macos/Start ClipDrop Helper.command`.
-2. En Premiere, activa `Preferencias > Plugins > Enable developer mode` y
-   reinicia la aplicación.
-3. En UXP Developer Tool, añade la carpeta `plugin` y pulsa `Load & Watch`.
-4. Abre `Ventana > UXP Plugins > ClipDrop`.
+2. Abre un proyecto en Premiere.
+3. Abre `Ventana > UXP Plugins > ClipDrop`.
+
+Para cargar el código fuente durante el desarrollo:
+
+1. Activa `Preferencias > Plugins > Enable developer mode` y reinicia Premiere.
+2. En UXP Developer Tool, añade la carpeta `plugin` y pulsa `Load & Watch`.
 
 ## Probar en Windows
 
@@ -46,6 +51,10 @@ npm run package:plugin
 El archivo resultante queda en `dist/ClipDrop-0.1.0.ccx`. Ábrelo con doble clic
 para que Creative Cloud Desktop instale el panel. El Helper debe permanecer
 abierto mientras se realizan descargas.
+
+También puede instalarse con la herramienta oficial UPIA incluida con Creative
+Cloud. Consulta `docs/local-validation-2026-07-23.md` para ver el comando y la
+validación realizada en Premiere Pro 26.3.
 
 ## Uso
 

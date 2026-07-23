@@ -5,6 +5,7 @@ const assert = require("node:assert/strict");
 const { importIntoPremiere } = require("../src/premiere");
 
 function createPremiere(items = []) {
+  let projectLocked = false;
   const root = {
     getItems: async () => items,
     createBinAction: (name) => ({
@@ -16,7 +17,20 @@ function createPremiere(items = []) {
   const imports = [];
   const project = {
     getRootItem: async () => root,
+    lockedAccess(callback) {
+      projectLocked = true;
+      try {
+        return callback();
+      } finally {
+        projectLocked = false;
+      }
+    },
     executeTransaction(callback) {
+      assert.equal(
+        projectLocked,
+        true,
+        "bin creation must run inside project.lockedAccess",
+      );
       callback({
         addAction(action) {
           action.apply();

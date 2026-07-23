@@ -25,7 +25,7 @@ function createOutputFileName(job, now = new Date()) {
 function mapProcessError(error, command) {
   if (error.code === "ENOENT") {
     const mapped = new Error(
-      `No se encontró ${command}. Reinstala o repara ClipDrop Helper.`,
+      `${command} was not found. Reinstall or repair ClipDrop Helper.`,
     );
     mapped.code = "BINARY_MISSING";
     return mapped;
@@ -33,7 +33,7 @@ function mapProcessError(error, command) {
   if (error.name === "AbortError") {
     return error;
   }
-  const mapped = new Error(error.message || `${command} terminó con un error.`);
+  const mapped = new Error(error.message || `${command} failed.`);
   mapped.code = error.code || "PROCESS_FAILED";
   return mapped;
 }
@@ -73,7 +73,7 @@ function runProcess(command, args, options = {}) {
 
     const abort = () => {
       child.kill("SIGTERM");
-      const error = new Error("Trabajo cancelado.");
+      const error = new Error("Job cancelled.");
       error.name = "AbortError";
       reject(error);
     };
@@ -93,7 +93,7 @@ function runProcess(command, args, options = {}) {
         resolve();
       } else if (!options.signal?.aborted) {
         const error = new Error(
-          stderrTail.trim() || `${command} terminó con código ${code}.`,
+          stderrTail.trim() || `${command} exited with code ${code}.`,
         );
         error.code = "PROCESS_FAILED";
         reject(error);
@@ -108,7 +108,7 @@ async function findDownloadedSource(workingDirectory) {
     (entry) => entry.isFile() && entry.name.startsWith("source."),
   );
   if (!source) {
-    const error = new Error("La descarga terminó sin producir un archivo.");
+    const error = new Error("The download finished without producing a file.");
     error.code = "SOURCE_MISSING";
     throw error;
   }
@@ -150,7 +150,7 @@ async function runMediaJob(job, controls) {
     controls.update({ phase: "finalize", progress: 98 });
     return outputPath;
   } catch (error) {
-    throw mapProcessError(error, error.command || "el proceso");
+    throw mapProcessError(error, error.command || "the process");
   } finally {
     await fs.rm(workingDirectory, { recursive: true, force: true });
   }

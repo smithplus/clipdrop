@@ -12,7 +12,7 @@ const manager = new JobManager({ runJob: runMediaJob });
 const server = createApiServer({ manager, getHealth });
 
 server.listen(port, host, () => {
-  console.log(`ClipDrop Helper disponible en http://${host}:${port}`);
+  console.log(`ClipDrop Helper available at http://${host}:${port}`);
 });
 
 function shutdown() {

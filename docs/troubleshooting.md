@@ -1,44 +1,45 @@
-# Solución de problemas
+# Troubleshooting
 
-## Helper desconectado
+## Helper Disconnected
 
-Comprueba:
+Check:
 
 ```sh
 curl http://127.0.0.1:47821/health
 ```
 
-Una respuesta correcta contiene `"ready": true`. Si no responde:
+A healthy response contains `"ready": true`. If it does not respond:
 
-- macOS: abre `helper/install/macos/Start ClipDrop Helper.command`.
-- Windows: abre `helper\install\windows\Start ClipDrop Helper.cmd`.
-- Confirma que el puerto `47821` no esté ocupado.
+- macOS: open `helper/install/macos/Start ClipDrop Helper.command`.
+- Windows: open `helper\install\windows\Start ClipDrop Helper.cmd`.
+- Confirm port `47821` is not already in use.
 
-Si responde pero `ready` es `false`, falta yt-dlp o ffmpeg en `PATH`.
+If it responds with `ready: false`, yt-dlp or ffmpeg is missing from `PATH`.
 
-## El preview no carga
+## Preview Does Not Load
 
-- Confirma que el enlace sea público y válido.
-- Algunos videos bloquean la reproducción embebida.
-- Videos con autenticación, edad o restricciones regionales pueden fallar.
-- Usa los campos Inicio y Final si la reproducción embebida no está disponible.
+- Confirm the link is public and valid.
+- Some videos block embedded playback.
+- Videos requiring authentication or age checks, or carrying regional
+  restrictions, may fail.
+- Use the Start and End fields when embedded playback is unavailable.
 
-## ClipDrop no aparece en Premiere
+## ClipDrop Does Not Appear in Premiere
 
-1. Confirma que Premiere sea 25.6 o posterior.
-2. Instala nuevamente el `.ccx`.
-3. Guarda el proyecto y reinicia Premiere.
-4. Busca `Ventana > UXP Plugins > ClipDrop`.
+1. Confirm Premiere is version 25.6 or later.
+2. Reinstall the `.ccx`.
+3. Save the project and restart Premiere.
+4. Open `Window > UXP Plugins > ClipDrop`.
 
-## Descarga correcta, importación fallida
+## Download Succeeds but Import Fails
 
-- Debe haber un proyecto abierto.
-- La carpeta elegida debe seguir disponible.
-- Comprueba permisos de lectura y escritura.
-- Intenta importar manualmente el archivo generado para distinguir un problema
-  de formato de un problema de API.
+- A Premiere project must be open.
+- The selected folder must remain available.
+- Check read and write permissions.
+- Try importing the generated file manually to distinguish a media-format issue
+  from a Premiere API issue.
 
-## Registros
+## Logs
 
 macOS:
 
@@ -46,5 +47,5 @@ macOS:
 ~/Library/Logs/Adobe/Adobe Premiere Pro 2026/UXPLogs_*.log
 ```
 
-El Helper escribe en la terminal que lo inició. La versión independiente
-escribirá registros propios bajo `~/Library/Logs/ClipDrop`.
+The Helper writes to the terminal that started it. The standalone release will
+write its own logs under `~/Library/Logs/ClipDrop`.

@@ -46,7 +46,7 @@ The panel retries the Helper connection for a short bounded period before
 showing an error. If the Helper remains unavailable, the panel shows:
 
 - `Reintentar`
-- `Abrir diagnóstico`
+- `Open Diagnostics`
 - The installed Helper version and expected port when available
 
 It must not suggest installing Node.js or manually running source files.

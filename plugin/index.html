@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,25 +12,25 @@
       <header class="app-header">
         <div>
           <h1>ClipDrop</h1>
-          <p>Importar desde YouTube</p>
+          <p>Import from YouTube</p>
         </div>
-        <div class="helper-status" title="Estado de ClipDrop Helper">
+        <div class="helper-status" title="ClipDrop Helper status">
           <span id="status-dot" class="status-dot is-checking"></span>
-          <span id="helper-label">Comprobando</span>
+          <span id="helper-label">Checking</span>
         </div>
       </header>
 
       <section id="legal-notice" class="legal-notice" hidden>
         <p>
-          Usa esta herramienta sólo con material propio, autorizado o permitido
-          legalmente. No evita DRM, pagos ni accesos privados.
+          Use this tool only with media you own or are authorized to download.
+          It does not bypass DRM, paywalls, or private access.
         </p>
-        <button id="accept-notice" type="button" class="quiet-button">Entendido</button>
+        <button id="accept-notice" type="button" class="quiet-button">Got it</button>
       </section>
 
       <form id="clip-form" novalidate>
         <div class="field">
-          <label for="source-url">Enlace</label>
+          <label for="source-url">Link</label>
           <div class="url-row">
             <input
               id="source-url"
@@ -53,7 +53,7 @@
             src="plugin:/preview/player.html"
             width="100%"
             height="100%"
-            aria-label="Vista previa de YouTube"
+            aria-label="YouTube preview"
           ></webview>
 
           <div class="preview-time-row">
@@ -73,7 +73,7 @@
               max="1"
               step="0.01"
               value="0"
-              aria-label="Punto de entrada"
+              aria-label="In point"
             />
             <input
               id="selection-out-range"
@@ -83,7 +83,7 @@
               max="1"
               step="0.01"
               value="1"
-              aria-label="Punto de salida"
+              aria-label="Out point"
             />
           </div>
 
@@ -92,60 +92,66 @@
               id="preview-toggle"
               class="icon-button"
               type="button"
-              title="Reproducir o pausar"
-              aria-label="Reproducir o pausar"
+              title="Play or pause"
+              aria-label="Play or pause"
             >
               ▶
             </button>
             <button id="mark-in" class="secondary-button" type="button">
-              Marcar In
+              <svg class="mark-icon" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 4v16M8 12h12M16 8l4 4-4 4" />
+              </svg>
+              <span>Mark In</span>
             </button>
             <button id="mark-out" class="secondary-button" type="button">
-              Marcar Out
+              <svg class="mark-icon" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 4v16M4 12h12M12 8l4 4-4 4" />
+              </svg>
+              <span>Mark Out</span>
             </button>
             <button id="play-selection" class="secondary-button" type="button">
-              Reproducir selección
+              Play Selection
             </button>
           </div>
         </section>
 
         <fieldset class="field">
-          <legend>Duración</legend>
-          <div class="segmented two-columns" role="group" aria-label="Duración">
+          <legend>Duration</legend>
+          <div class="segmented two-columns" role="group" aria-label="Duration">
             <button id="mode-full" class="segment-button is-selected" type="button" aria-pressed="true">
-              Clip completo
+              Full Clip
             </button>
             <button id="mode-segment" class="segment-button" type="button" aria-pressed="false">
-              Segmento
+              Segment
             </button>
           </div>
         </fieldset>
 
         <div id="time-fields" class="time-grid" hidden>
           <div class="field">
-            <label for="start-time">Inicio</label>
+            <label for="start-time">Start</label>
             <input id="start-time" type="text" inputmode="decimal" placeholder="00:00" />
           </div>
           <div class="field">
-            <label for="end-time">Final</label>
+            <label for="end-time">End</label>
             <input id="end-time" type="text" inputmode="decimal" placeholder="00:30" />
           </div>
           <div class="field selection-duration-field">
-            <label for="selection-duration">Selección</label>
+            <label for="selection-duration">Selection</label>
             <output id="selection-duration">00:00.000</output>
           </div>
         </div>
 
         <fieldset class="field">
-          <legend>Salida</legend>
-          <div class="segmented output-grid" role="group" aria-label="Tipo de salida">
+          <legend>Output</legend>
+          <div class="segmented output-grid" role="group" aria-label="Output type">
             <button
               id="output-video-audio"
               class="segment-button is-selected"
               type="button"
               aria-pressed="true"
             >
-              Video + audio
+              Video + Audio
             </button>
             <button
               id="output-audio-only"
@@ -153,7 +159,7 @@
               type="button"
               aria-pressed="false"
             >
-              Sólo audio
+              Audio Only
             </button>
             <button
               id="output-video-only"
@@ -161,22 +167,22 @@
               type="button"
               aria-pressed="false"
             >
-              Sólo video
+              Video Only
             </button>
           </div>
         </fieldset>
 
         <div class="field">
-          <label for="output-folder">Guardar en</label>
+          <label for="output-folder">Save to</label>
           <div class="folder-row">
-            <input id="output-folder" type="text" readonly placeholder="Elige una carpeta" />
-            <button id="choose-folder" class="secondary-button" type="button">Elegir</button>
+            <input id="output-folder" type="text" readonly placeholder="Choose a folder" />
+            <button id="choose-folder" class="secondary-button" type="button">Choose</button>
           </div>
         </div>
 
         <div id="progress-area" class="progress-area" aria-live="polite">
           <div class="progress-copy">
-            <span id="progress-label">Listo</span>
+            <span id="progress-label">Ready</span>
             <span id="progress-value"></span>
           </div>
           <progress id="progress-bar" max="100" value="0"></progress>
@@ -185,13 +191,16 @@
 
         <div class="action-row">
           <button id="import-button" class="primary-button" type="submit">
-            Descargar e importar
+            Download and Import
           </button>
           <button id="cancel-button" class="danger-button" type="button" hidden>
-            Cancelar
+            Cancel
           </button>
         </div>
       </form>
+      <footer class="app-footer">
+        <span id="app-version">v0.3.0</span>
+      </footer>
     </main>
   </body>
 </html>

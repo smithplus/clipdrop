@@ -59,6 +59,40 @@ test("panel markup contains every primary workflow control", () => {
   }
 });
 
+test("panel uses English copy and exposes every output mode", () => {
+  const html = fs.readFileSync(path.join(pluginRoot, "index.html"), "utf8");
+
+  assert.match(html, /<html lang="en">/);
+  assert.match(html, />Mark In</);
+  assert.match(html, />Mark Out</);
+  assert.match(html, />\s*Video \+ Audio\s*</);
+  assert.match(html, />\s*Audio Only\s*</);
+  assert.match(html, />\s*Video Only\s*</);
+});
+
+test("mark controls include local accessible icons", () => {
+  const html = fs.readFileSync(path.join(pluginRoot, "index.html"), "utf8");
+
+  assert.match(
+    html,
+    /id="mark-in"[\s\S]*?<svg[^>]+class="mark-icon"[^>]+aria-hidden="true"/,
+  );
+  assert.match(
+    html,
+    /id="mark-out"[\s\S]*?<svg[^>]+class="mark-icon"[^>]+aria-hidden="true"/,
+  );
+});
+
+test("panel footer displays the manifest version", () => {
+  const html = fs.readFileSync(path.join(pluginRoot, "index.html"), "utf8");
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(pluginRoot, "manifest.json"), "utf8"),
+  );
+  const version = html.match(/id="app-version">v([^<]+)</)?.[1];
+
+  assert.equal(version, manifest.version);
+});
+
 test("local preview page loads the official YouTube player API", () => {
   const html = fs.readFileSync(
     path.join(pluginRoot, "preview", "player.html"),

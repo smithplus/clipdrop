@@ -42,7 +42,7 @@ test("ClipDropController exposes failed jobs without importing", async () => {
       getJob: async () => ({
         id: "job-2",
         status: "failed",
-        error: { code: "PROCESS_FAILED", message: "Falló la descarga" },
+        error: { code: "PROCESS_FAILED", message: "Download failed" },
       }),
     },
     importMedia: async () => assert.fail("must not import"),
@@ -50,7 +50,7 @@ test("ClipDropController exposes failed jobs without importing", async () => {
     delay: async () => {},
   });
 
-  await assert.rejects(() => controller.submit({}), /Falló la descarga/);
+  await assert.rejects(() => controller.submit({}), /Download failed/);
   assert.equal(states.at(-1).kind, "error");
 });
 

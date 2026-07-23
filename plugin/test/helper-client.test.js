@@ -35,14 +35,14 @@ test("HelperClient surfaces structured helper errors", async () => {
   const client = new HelperClient({
     fetchImpl: async () =>
       response(400, {
-        error: { code: "INVALID_REQUEST", message: "Enlace no válido" },
+        error: { code: "INVALID_REQUEST", message: "Invalid link" },
       }),
   });
 
   await assert.rejects(
     () => client.createJob({}),
     (error) =>
-      error.code === "INVALID_REQUEST" && error.message === "Enlace no válido",
+      error.code === "INVALID_REQUEST" && error.message === "Invalid link",
   );
 });
 

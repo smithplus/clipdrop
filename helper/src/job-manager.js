@@ -11,14 +11,14 @@ function publicJob(job) {
 function structuredError(error) {
   return {
     code: error.code || "JOB_FAILED",
-    message: error.message || "No se pudo completar el trabajo.",
+    message: error.message || "The job could not be completed.",
   };
 }
 
 class JobManager {
   constructor({ runJob }) {
     if (typeof runJob !== "function") {
-      throw new TypeError("JobManager necesita una función runJob.");
+      throw new TypeError("JobManager requires a runJob function.");
     }
     this.runJob = runJob;
     this.jobs = new Map();

@@ -6,8 +6,8 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 for TOOL in node yt-dlp ffmpeg; do
   if ! command -v "$TOOL" >/dev/null 2>&1; then
     echo "Falta $TOOL."
-    echo "Instálalo y vuelve a abrir ClipDrop Helper."
-    read -r "?Pulsa Enter para cerrar."
+    echo "Install it and reopen ClipDrop Helper."
+    read -r "?Press Enter to close."
     exit 1
   fi
 done

@@ -21,6 +21,6 @@ goto missing
 echo Falta ffmpeg.
 
 :missing
-echo Instala el componente indicado y vuelve a abrir ClipDrop Helper.
+echo Install the required component and reopen ClipDrop Helper.
 pause
 exit /b 1

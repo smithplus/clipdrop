@@ -41,7 +41,7 @@ function sendMetadataWhenAvailable() {
       clearInterval(metadataTimer);
       send("error", {
         code: "METADATA_TIMEOUT",
-        message: "YouTube no informó la duración del video.",
+        message: "YouTube did not report the video duration.",
       });
     }
   }, 250);
@@ -111,7 +111,7 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
       onError(event) {
         send("error", {
           code: event.data,
-          message: "YouTube no permite reproducir este video aquí.",
+          message: "YouTube does not allow this video to play here.",
         });
       },
     },

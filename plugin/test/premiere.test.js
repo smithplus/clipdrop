@@ -82,6 +82,6 @@ test("importIntoPremiere requires an active project", async () => {
   const api = { Project: { getActiveProject: async () => null } };
   await assert.rejects(
     () => importIntoPremiere(api, "/tmp/clip.mp4"),
-    /proyecto abierto/i,
+    /open a Premiere project/i,
   );
 });

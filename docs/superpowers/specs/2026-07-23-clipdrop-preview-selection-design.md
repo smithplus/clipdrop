@@ -20,11 +20,11 @@ the download job.
 4. ClipDrop reads the video duration and current playback time.
 5. The editor can set In and Out using:
    - Timeline handles.
-   - `Marcar In` and `Marcar Out` at the current playback time.
+   - `Mark In` and `Mark Out` at the current playback time.
    - Editable `HH:MM:SS` fields.
 6. ClipDrop displays the selected duration.
-7. `Reproducir selección` seeks to In and pauses at Out.
-8. `Descargar e importar selección` sends the chosen seconds to the Helper.
+7. `Play Selection` seeks to In and pauses at Out.
+8. `Download and Import` sends the chosen seconds to the Helper.
 9. The Helper downloads and creates the precise final segment with ffmpeg.
 
 Full-clip, audio-only, and video-only workflows remain available.
@@ -40,7 +40,7 @@ The panel uses a compact editing layout:
 - Transport row with play/pause, mark In, mark Out, and play-selection controls.
 - In, Out, and selected-duration fields.
 - Output format and destination controls.
-- Primary `Descargar e importar` action.
+- Primary `Download and Import` action.
 
 At narrow panel widths, time fields wrap into two rows. Controls retain stable
 dimensions and do not overlap or resize the timeline.
@@ -125,7 +125,7 @@ YouTube preview seeking can land on the nearest keyframe and is not the source
 of final cut precision. The selected numeric seconds are sent to the Helper,
 and ffmpeg produces the exact requested segment.
 
-During `Reproducir selección`, the WebView polls current playback time and
+During `Play Selection`, the WebView polls current playback time and
 pauses when it reaches Out. This is a preview convenience, not a frame-accurate
 edit decision system.
 

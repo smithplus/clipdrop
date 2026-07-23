@@ -230,10 +230,25 @@ form {
 }
 
 .preview-controls .secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   min-width: 0;
   padding: 0 7px;
   font-size: 10px;
   white-space: normal;
+}
+
+.mark-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .field {
@@ -418,6 +433,15 @@ progress {
 .action-row {
   display: flex;
   gap: 8px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
 }
 
 [hidden] {

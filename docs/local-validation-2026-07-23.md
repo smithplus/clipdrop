@@ -1,8 +1,8 @@
-# Validación local de ClipDrop 0.1.0
+# ClipDrop 0.1.0 Local Validation
 
-Fecha: 2026-07-23
+Date: 2026-07-23
 
-Entorno:
+Environment:
 
 - macOS
 - Adobe Premiere Pro 26.3.0
@@ -10,33 +10,32 @@ Entorno:
 - yt-dlp 2026.07.04
 - ffmpeg 8.1.2
 
-## Resultados
+## Results
 
-- Las 44 pruebas automáticas pasaron.
-- El Helper respondió en `127.0.0.1:47821` con `ready: true`.
-- El paquete `dist/ClipDrop-0.1.0.ccx` pasó la comprobación de integridad ZIP.
-- El instalador oficial UPIA de Adobe instaló el paquete correctamente.
-- UPIA listó `ClipDrop 0.1.0` como habilitado para Premiere Pro.
-- El registro UXP de Premiere confirmó la carga de
-  `com.clipdrop.premiere` sin errores del plugin.
-- Una descarga real produjo un segmento MP4 de 2.000 segundos con video H.264
-  1920x1080 y audio AAC de 48 kHz.
+- All 44 automated tests passed.
+- The Helper responded at `127.0.0.1:47821` with `ready: true`.
+- `dist/ClipDrop-0.1.0.ccx` passed the ZIP integrity check.
+- Adobe's official UPIA installer installed the package successfully.
+- UPIA listed `ClipDrop 0.1.0` as enabled for Premiere Pro.
+- Premiere's UXP log confirmed that `com.clipdrop.premiere` loaded without
+  plugin errors.
+- A real download produced a 2.000-second MP4 segment with 1920x1080 H.264
+  video and 48 kHz AAC audio.
 
-## Instalación verificada en macOS
+## Verified macOS Installation
 
 ```sh
 "/Library/Application Support/Adobe/Adobe Desktop Common/RemoteComponents/UPI/UnifiedPluginInstallerAgent/UnifiedPluginInstallerAgent.app/Contents/MacOS/UnifiedPluginInstallerAgent" \
-  --install "/ruta/a/dist/ClipDrop-0.1.0.ccx"
+  --install "/path/to/dist/ClipDrop-0.1.0.ccx"
 ```
 
-## Prueba manual final
+## Final Manual Test
 
-1. Abre `helper/install/macos/Start ClipDrop Helper.command`.
-2. Abre un proyecto de Premiere.
-3. Abre `Ventana > UXP Plugins > ClipDrop`.
-4. Elige una carpeta de destino y usa un video que tengas permiso para
-   descargar.
-5. Confirma que el resultado aparece en `ClipDrop Imports`.
+1. Open `helper/install/macos/Start ClipDrop Helper.command`.
+2. Open a Premiere project.
+3. Open `Window > UXP Plugins > ClipDrop`.
+4. Choose an output folder and use a video you are authorized to download.
+5. Confirm the result appears in `ClipDrop Imports`.
 
-La apertura visual del panel y la selección del archivo requieren interacción
-con Premiere. El resto del flujo quedó validado localmente.
+Opening the panel and selecting a file require interaction with Premiere. The
+rest of the workflow was validated locally.

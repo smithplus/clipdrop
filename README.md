@@ -1,36 +1,36 @@
 # ClipDrop
 
-ClipDrop es una extensión UXP para Adobe Premiere Pro que permite
-previsualizar material autorizado de YouTube, marcar puntos In y Out, descargar
-solamente el segmento elegido e importarlo al proyecto abierto.
+ClipDrop is a UXP extension for Adobe Premiere Pro that lets editors preview
+authorized YouTube media, mark In and Out points, download only the selected
+segment, and import it into the open project.
 
-> Estado: `0.2.0` es una versión de desarrollo funcional. El panel, el preview
-> y la conversión están probados en macOS con Premiere Pro 26.3. El instalador
-> autocontenido que elimina Node.js, yt-dlp y ffmpeg como requisitos externos
-> todavía está en desarrollo.
+> Status: `0.3.0` is a functional development release. The panel, preview, and
+> conversion pipeline have been tested on macOS with Premiere Pro 26.3. A
+> self-contained installer that removes Node.js, yt-dlp, and ffmpeg as external
+> requirements is still under development.
 
-## Funciones
+## Features
 
-- Preview mediante el reproductor oficial de YouTube.
-- Timeline con cabezal y marcadores In/Out.
-- Marcado desde el tiempo actual o mediante campos editables.
-- Clip completo o segmento.
-- Video con audio, audio WAV o video sin audio.
-- Conversión a formatos adecuados para Premiere.
-- Importación automática en `ClipDrop Imports`.
-- Helper local limitado a `127.0.0.1`.
+- Preview through the official YouTube player.
+- Timeline with a playhead and In/Out markers.
+- In and Out marking from the current time or editable fields.
+- Full clip or selected segment.
+- Video with audio, WAV audio, or video without audio.
+- Conversion to Premiere-friendly formats.
+- Automatic import into `ClipDrop Imports`.
+- Local Helper restricted to `127.0.0.1`.
 
-## Requisitos actuales
+## Current Requirements
 
-- Adobe Premiere Pro 25.6 o posterior.
-- Node.js 20 o posterior.
+- Adobe Premiere Pro 25.6 or later.
+- Node.js 20 or later.
 - yt-dlp.
-- ffmpeg y ffprobe.
+- ffmpeg and ffprobe.
 
-La versión autocontenida planificada incluirá estas dependencias y arrancará el
-Helper automáticamente.
+The planned self-contained release will bundle these dependencies and start the
+Helper automatically.
 
-## Inicio rápido
+## Quick Start
 
 ### macOS
 
@@ -38,34 +38,34 @@ Helper automáticamente.
 brew install node yt-dlp ffmpeg
 ```
 
-1. Descarga o clona este repositorio.
-2. Abre `helper/install/macos/Start ClipDrop Helper.command`.
-3. Instala `dist/ClipDrop-0.2.0.ccx`.
-4. Abre un proyecto en Premiere.
-5. Abre `Ventana > UXP Plugins > ClipDrop`.
+1. Download or clone this repository.
+2. Open `helper/install/macos/Start ClipDrop Helper.command`.
+3. Install `dist/ClipDrop-0.3.0.ccx`.
+4. Open a project in Premiere.
+5. Open `Window > UXP Plugins > ClipDrop`.
 
 ### Windows
 
-1. Instala Node.js, yt-dlp y ffmpeg.
-2. Abre `helper\install\windows\Start ClipDrop Helper.cmd`.
-3. Instala `dist\ClipDrop-0.2.0.ccx`.
-4. Abre `Ventana > UXP Plugins > ClipDrop` en Premiere.
+1. Install Node.js, yt-dlp, and ffmpeg.
+2. Open `helper\install\windows\Start ClipDrop Helper.cmd`.
+3. Install `dist\ClipDrop-0.3.0.ccx`.
+4. Open `Window > UXP Plugins > ClipDrop` in Premiere.
 
-Consulta [Instalación](docs/installation.md) para usar UPIA sin navegar por
+See [Installation](docs/installation.md) to use UPIA without navigating through
 Creative Cloud Desktop.
 
-## Uso
+## Usage
 
-1. Pega un enlace público de YouTube que tengas permiso para descargar.
-2. Pulsa `Preview`.
-3. Marca In y Out en la timeline, con los botones o escribiendo los tiempos.
-4. Elige el tipo de salida y la carpeta.
-5. Pulsa `Descargar e importar`.
+1. Paste a public YouTube link that you are authorized to download.
+2. Select `Preview`.
+3. Mark In and Out on the timeline, use the buttons, or enter the times.
+4. Choose `Video + Audio`, `Audio Only`, or `Video Only`, then select a folder.
+5. Select `Download and Import`.
 
-Los tiempos aceptan segundos, `MM:SS` y `HH:MM:SS`. Si un video impide la
-reproducción embebida, la selección manual continúa disponible.
+Time fields accept seconds, `MM:SS`, and `HH:MM:SS`. Manual selection remains
+available when a video blocks embedded playback.
 
-## Desarrollo
+## Development
 
 ```sh
 npm test
@@ -73,26 +73,26 @@ npm run start:helper
 npm run package:plugin
 ```
 
-Las 57 pruebas actuales cubren validación, trabajos, conversión, API local,
-integración con Premiere, selección In/Out, mensajes del preview y empaquetado.
+The automated suite covers validation, jobs, conversion, the local API,
+Premiere integration, In/Out selection, preview messages, and packaging.
 
-## Documentación
+## Documentation
 
-- [Instalación](docs/installation.md)
-- [Arquitectura](docs/architecture.md)
-- [Desarrollo](docs/development.md)
-- [Solución de problemas](docs/troubleshooting.md)
-- [Validación local](docs/local-validation-2026-07-23.md)
-- [Diseño de distribución independiente](docs/superpowers/specs/2026-07-23-clipdrop-standalone-distribution-design.md)
-- [Diseño del preview](docs/superpowers/specs/2026-07-23-clipdrop-preview-selection-design.md)
+- [Installation](docs/installation.md)
+- [Architecture](docs/architecture.md)
+- [Development](docs/development.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Local validation](docs/local-validation-2026-07-23.md)
+- [Standalone distribution design](docs/superpowers/specs/2026-07-23-clipdrop-standalone-distribution-design.md)
+- [Preview design](docs/superpowers/specs/2026-07-23-clipdrop-preview-selection-design.md)
 
-## Uso responsable
+## Responsible Use
 
-ClipDrop no evita DRM, pagos, autenticación ni restricciones regionales.
-Utilízalo únicamente con material propio, autorizado o permitido legalmente.
-El usuario es responsable de respetar los derechos aplicables y las
-condiciones del servicio de origen.
+ClipDrop does not bypass DRM, paywalls, authentication, or regional
+restrictions. Use it only with media you own, are authorized to use, or are
+legally allowed to download. You are responsible for complying with applicable
+rights and the source service's terms.
 
-## Repositorio
+## Repository
 
 `https://github.com/smithplus/clipdrop`

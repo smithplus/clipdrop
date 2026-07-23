@@ -1,6 +1,6 @@
-# Desarrollo
+# Development
 
-## Preparación
+## Setup
 
 ```sh
 git clone https://github.com/smithplus/clipdrop.git
@@ -8,10 +8,10 @@ cd clipdrop
 npm test
 ```
 
-El proyecto no tiene dependencias npm en tiempo de ejecución. Las pruebas usan
-el runner integrado de Node.js.
+The project has no npm runtime dependencies. Tests use Node.js's built-in test
+runner.
 
-## Comandos
+## Commands
 
 ```sh
 npm test
@@ -22,32 +22,32 @@ npm run start:helper
 npm run package:plugin
 ```
 
-## Estructura
+## Structure
 
-- `plugin/`: panel UXP y preview.
-- `helper/`: API local y procesamiento multimedia.
-- `scripts/`: empaquetado.
-- `dist/`: paquete `.ccx`.
-- `docs/`: arquitectura, instalación y decisiones de diseño.
+- `plugin/`: UXP panel and preview.
+- `helper/`: local API and media processing.
+- `scripts/`: packaging.
+- `dist/`: `.ccx` package.
+- `docs/`: architecture, installation, and design decisions.
 
-## Ciclo recomendado
+## Recommended Cycle
 
-1. Añade una prueba que describa el comportamiento.
-2. Confirma que falla por la funcionalidad ausente.
-3. Implementa el cambio mínimo.
-4. Ejecuta la suite completa.
-5. Regenera el `.ccx`.
-6. Instala y prueba en Premiere.
+1. Add a test that describes the behavior.
+2. Confirm it fails because the behavior is absent.
+3. Implement the smallest change.
+4. Run the complete suite.
+5. Rebuild the `.ccx`.
+6. Install and test it in Premiere.
 
-## Cargar con UDT
+## Load with UDT
 
-1. Activa el modo desarrollador en las preferencias de plugins de Premiere.
-2. Reinicia Premiere.
-3. Añade `plugin/manifest.json` en UXP Developer Tool.
-4. Usa `Load & Watch`.
+1. Enable developer mode in Premiere's plugin preferences.
+2. Restart Premiere.
+3. Add `plugin/manifest.json` in UXP Developer Tool.
+4. Use `Load & Watch`.
 
 ## GitHub Actions
 
-`.github/workflows/validate.yml` ejecuta pruebas, crea el `.ccx` y lo publica
-como artefacto de la ejecución. Los instaladores autocontenidos multiplataforma
-se añadirán en una fase posterior.
+`.github/workflows/validate.yml` runs tests, builds the `.ccx`, and uploads it as
+a workflow artifact. Self-contained cross-platform installers will be added in
+a later phase.

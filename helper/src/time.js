@@ -1,7 +1,7 @@
 "use strict";
 
 function timeError() {
-  return new TypeError("El tiempo debe usar segundos, MM:SS o HH:MM:SS.");
+  return new TypeError("Time must use seconds, MM:SS, or HH:MM:SS.");
 }
 
 function parseTime(value) {

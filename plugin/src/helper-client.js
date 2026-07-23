@@ -21,7 +21,7 @@ class HelperClient {
       });
     } catch {
       const error = new Error(
-        "ClipDrop Helper no está disponible. Abre o reinstala el Helper.",
+        "ClipDrop Helper is unavailable. Open or reinstall the Helper.",
       );
       error.code = "HELPER_OFFLINE";
       throw error;
@@ -30,7 +30,7 @@ class HelperClient {
     const body = await response.json();
     if (!response.ok) {
       const error = new Error(
-        body.error?.message || `El Helper respondió con estado ${response.status}.`,
+        body.error?.message || `The Helper responded with status ${response.status}.`,
       );
       error.code = body.error?.code || "HELPER_ERROR";
       throw error;

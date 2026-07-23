@@ -40,7 +40,7 @@ test("validateJobRequest rejects an invalid segment range", () => {
         startTime: "20",
         endTime: "10",
       }),
-    /posterior/i,
+    /after/i,
   );
 });
 

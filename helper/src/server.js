@@ -18,7 +18,7 @@ async function readJson(request) {
   for await (const chunk of request) {
     body += chunk;
     if (Buffer.byteLength(body) > MAX_BODY_BYTES) {
-      const error = new Error("La solicitud es demasiado grande.");
+      const error = new Error("The request is too large.");
       error.code = "BODY_TOO_LARGE";
       throw error;
     }
@@ -26,7 +26,7 @@ async function readJson(request) {
   try {
     return JSON.parse(body || "{}");
   } catch {
-    const error = new Error("El cuerpo JSON no es válido.");
+    const error = new Error("The JSON body is invalid.");
     error.code = "INVALID_JSON";
     throw error;
   }
@@ -55,7 +55,7 @@ function createApiServer({ manager, getHealth }) {
         sendJson(response, 403, {
           error: {
             code: "CLIENT_FORBIDDEN",
-            message: "La solicitud no procede del panel ClipDrop.",
+            message: "The request did not come from the ClipDrop panel.",
           },
         });
         return;
@@ -72,7 +72,7 @@ function createApiServer({ manager, getHealth }) {
         const job = manager.get(cancelId);
         if (!job) {
           sendJson(response, 404, {
-            error: { code: "JOB_NOT_FOUND", message: "Trabajo no encontrado." },
+            error: { code: "JOB_NOT_FOUND", message: "Job not found." },
           });
           return;
         }
@@ -86,7 +86,7 @@ function createApiServer({ manager, getHealth }) {
         const job = manager.get(jobId);
         if (!job) {
           sendJson(response, 404, {
-            error: { code: "JOB_NOT_FOUND", message: "Trabajo no encontrado." },
+            error: { code: "JOB_NOT_FOUND", message: "Job not found." },
           });
           return;
         }

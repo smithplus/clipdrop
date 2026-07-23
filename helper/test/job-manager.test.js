@@ -40,7 +40,7 @@ test("JobManager completes a queued job and exposes its result", async () => {
 test("JobManager maps execution failures to a structured error", async () => {
   const manager = new JobManager({
     runJob: async () => {
-      const error = new Error("No se encontró yt-dlp");
+      const error = new Error("yt-dlp was not found");
       error.code = "BINARY_MISSING";
       throw error;
     },
@@ -51,7 +51,7 @@ test("JobManager maps execution failures to a structured error", async () => {
 
   assert.deepEqual(manager.get(created.id).error, {
     code: "BINARY_MISSING",
-    message: "No se encontró yt-dlp",
+    message: "yt-dlp was not found",
   });
   assert.equal(manager.get(created.id).status, "failed");
 });

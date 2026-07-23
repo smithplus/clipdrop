@@ -23,32 +23,32 @@ function validateYoutubeUrl(value) {
   try {
     parsed = new URL(value);
   } catch {
-    throw new TypeError("Introduce un enlace válido de YouTube.");
+    throw new TypeError("Enter a valid YouTube link.");
   }
 
   if (parsed.protocol !== "https:" || !YOUTUBE_HOSTS.has(parsed.hostname.toLowerCase())) {
-    throw new TypeError("La primera versión sólo admite enlaces públicos de YouTube.");
+    throw new TypeError("This version only supports public YouTube links.");
   }
 }
 
 function validateJobRequest(request) {
   if (!request || typeof request !== "object" || Array.isArray(request)) {
-    throw new TypeError("El trabajo debe ser un objeto.");
+    throw new TypeError("The job must be an object.");
   }
 
   validateYoutubeUrl(request.url);
 
   if (!MODES.has(request.mode)) {
-    throw new TypeError("El modo debe ser full o segment.");
+    throw new TypeError("Mode must be full or segment.");
   }
   if (!OUTPUT_KINDS.has(request.outputKind)) {
-    throw new TypeError("El tipo de salida no es válido.");
+    throw new TypeError("The output type is invalid.");
   }
   if (
     typeof request.outputDirectory !== "string" ||
     !isAbsolutePath(request.outputDirectory)
   ) {
-    throw new TypeError("La carpeta de salida debe ser una ruta absoluta.");
+    throw new TypeError("The output folder must be an absolute path.");
   }
 
   let startSeconds = null;
@@ -57,7 +57,7 @@ function validateJobRequest(request) {
     startSeconds = parseTime(request.startTime);
     endSeconds = parseTime(request.endTime);
     if (endSeconds <= startSeconds) {
-      throw new RangeError("El final debe ser posterior al inicio.");
+      throw new RangeError("The end time must be after the start time.");
     }
   }
 

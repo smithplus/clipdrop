@@ -1,57 +1,58 @@
-# Instalación
+# Installation
 
-## Compatibilidad
+## Compatibility
 
-- Premiere Pro 25.6 o posterior.
-- macOS arm64/x64 o Windows x64.
-- Node.js 20 o posterior.
-- yt-dlp, ffmpeg y ffprobe disponibles en `PATH`.
+- Premiere Pro 25.6 or later.
+- macOS arm64/x64 or Windows x64.
+- Node.js 20 or later.
+- yt-dlp, ffmpeg, and ffprobe available on `PATH`.
 
 ## macOS
 
-Instala las dependencias:
+Install the dependencies:
 
 ```sh
 brew install node yt-dlp ffmpeg
 ```
 
-Inicia el Helper:
+Start the Helper:
 
 ```sh
 open "helper/install/macos/Start ClipDrop Helper.command"
 ```
 
-Instala `dist/ClipDrop-0.2.0.ccx` con doble clic. También puedes usar UPIA:
+Double-click `dist/ClipDrop-0.3.0.ccx` to install it. You can also use UPIA:
 
 ```sh
 "/Library/Application Support/Adobe/Adobe Desktop Common/RemoteComponents/UPI/UnifiedPluginInstallerAgent/UnifiedPluginInstallerAgent.app/Contents/MacOS/UnifiedPluginInstallerAgent" \
-  --install "/ruta/completa/ClipDrop-0.2.0.ccx"
+  --install "/full/path/ClipDrop-0.3.0.ccx"
 ```
 
 ## Windows
 
-1. Instala Node.js, yt-dlp y ffmpeg.
-2. Confirma que `node`, `yt-dlp`, `ffmpeg` y `ffprobe` funcionan desde CMD.
-3. Ejecuta `helper\install\windows\Start ClipDrop Helper.cmd`.
-4. Abre `dist\ClipDrop-0.2.0.ccx`.
+1. Install Node.js, yt-dlp, and ffmpeg.
+2. Confirm `node`, `yt-dlp`, `ffmpeg`, and `ffprobe` work from CMD.
+3. Run `helper\install\windows\Start ClipDrop Helper.cmd`.
+4. Open `dist\ClipDrop-0.3.0.ccx`.
 
-UPIA también puede instalar el paquete sin navegar por Creative Cloud Desktop:
+UPIA can also install the package without navigating through Creative Cloud
+Desktop:
 
 ```bat
-"%CommonProgramFiles%\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\ruta\ClipDrop-0.2.0.ccx"
+"%CommonProgramFiles%\Adobe\Adobe Desktop Common\RemoteComponents\UPI\UnifiedPluginInstallerAgent\UnifiedPluginInstallerAgent.exe" /install "C:\path\ClipDrop-0.3.0.ccx"
 ```
 
-## Abrir el panel
+## Open the Panel
 
-1. Abre un proyecto en Premiere.
-2. Selecciona `Ventana > UXP Plugins > ClipDrop`.
-3. Verifica que el indicador diga `Helper listo`.
+1. Open a project in Premiere.
+2. Select `Window > UXP Plugins > ClipDrop`.
+3. Confirm the status reads `Helper ready`.
 
-Después de actualizar el `.ccx`, guarda el proyecto y reinicia Premiere para
-asegurar que la nueva versión sustituya al plugin que estaba cargado en memoria.
+After updating the `.ccx`, save the project and restart Premiere so the new
+version replaces the plugin already loaded in memory.
 
-## Desarrollo
+## Development
 
-UXP Developer Tool 2.2 o posterior sólo es necesario para `Load & Watch`,
-depuración y empaquetado oficial durante desarrollo. No es necesario para usar
-un `.ccx` ya instalado.
+UXP Developer Tool 2.2 or later is required only for `Load & Watch`, debugging,
+and official packaging during development. It is not required to use an
+installed `.ccx`.

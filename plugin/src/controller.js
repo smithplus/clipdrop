@@ -48,7 +48,7 @@ class ClipDropController {
 
       if (job.status === "failed") {
         const error = new Error(
-          job.error?.message || "No se pudo completar la descarga.",
+          job.error?.message || "The download could not be completed.",
         );
         error.code = job.error?.code || "JOB_FAILED";
         throw error;

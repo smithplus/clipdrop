@@ -13,6 +13,6 @@ test("parseTime accepts seconds and editor-style timecodes", () => {
 
 test("parseTime rejects malformed or negative values", () => {
   for (const value of ["", "1:60", "1:2:60", "-1", "abc", null]) {
-    assert.throws(() => parseTime(value), /tiempo/i);
+    assert.throws(() => parseTime(value), /time/i);
   }
 });

@@ -112,7 +112,7 @@ function handlePreviewEvent(data) {
     selection.setDuration(event.durationSeconds);
     renderSelection();
     document.getElementById("load-preview").disabled = false;
-    showMessage("Preview listo.", "success");
+    showMessage("Preview ready.", "success");
     return;
   }
   if (event.type === "time") {
@@ -135,7 +135,7 @@ function loadPreview() {
   );
   document.getElementById("preview-section").hidden = false;
   document.getElementById("load-preview").disabled = true;
-  showMessage("Cargando preview...");
+  showMessage("Loading preview...");
   if (previewReady) {
     sendPreview("load", { videoId: previewVideoId });
   }
@@ -147,7 +147,7 @@ function updateSelectionFromField(kind) {
   );
   const seconds = timeToSeconds(input.value.trim());
   if (seconds === null) {
-    throw new TypeError("Usa segundos, MM:SS o HH:MM:SS.");
+    throw new TypeError("Use seconds, MM:SS, or HH:MM:SS.");
   }
   if (kind === "in") {
     selection.setIn(seconds);
@@ -168,15 +168,15 @@ function renderState(state) {
   if (state.kind === "health") {
     const ready = state.health.ready;
     dot.className = `status-dot ${ready ? "is-online" : "is-offline"}`;
-    helperLabel.textContent = ready ? "Helper listo" : "Faltan componentes";
+    helperLabel.textContent = ready ? "Helper ready" : "Components missing";
     if (!ready) {
-      showMessage("Repara ClipDrop Helper para instalar yt-dlp y ffmpeg.", "error");
+      showMessage("Repair ClipDrop Helper to install yt-dlp and ffmpeg.", "error");
     }
     return;
   }
   if (state.kind === "health-error") {
     dot.className = "status-dot is-offline";
-    helperLabel.textContent = "Helper desconectado";
+    helperLabel.textContent = "Helper disconnected";
     showMessage(state.error.message, "error");
     return;
   }
@@ -191,21 +191,21 @@ function renderState(state) {
   }
   if (state.kind === "imported") {
     progress.value = 100;
-    progressLabel.textContent = "Importado";
+    progressLabel.textContent = "Imported";
     progressValue.textContent = "100%";
     setBusy(false);
-    showMessage("Archivo añadido a ClipDrop Imports.", "success");
+    showMessage("File added to ClipDrop Imports.", "success");
     return;
   }
   if (state.kind === "cancelled") {
-    progressLabel.textContent = "Cancelado";
+    progressLabel.textContent = "Cancelled";
     progressValue.textContent = "";
     setBusy(false);
-    showMessage("Trabajo cancelado.");
+    showMessage("Job cancelled.");
     return;
   }
   if (state.kind === "error") {
-    progressLabel.textContent = "No se pudo completar";
+    progressLabel.textContent = "Could not complete";
     progressValue.textContent = "";
     setBusy(false);
     showMessage(state.error.message, "error");

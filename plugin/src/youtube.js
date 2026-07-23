@@ -13,11 +13,11 @@ function parseYouTubeVideoId(value) {
   try {
     url = new URL(value);
   } catch {
-    throw new TypeError("Introduce un enlace válido de YouTube.");
+    throw new TypeError("Enter a valid YouTube link.");
   }
 
   if (url.protocol !== "https:") {
-    throw new TypeError("El enlace de YouTube debe usar HTTPS.");
+    throw new TypeError("The YouTube link must use HTTPS.");
   }
 
   let videoId = "";
@@ -39,7 +39,7 @@ function parseYouTubeVideoId(value) {
   }
 
   if (!VIDEO_ID_PATTERN.test(videoId)) {
-    throw new TypeError("Introduce un enlace válido de YouTube.");
+    throw new TypeError("Enter a valid YouTube link.");
   }
   return videoId;
 }

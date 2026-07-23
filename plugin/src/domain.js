@@ -2,12 +2,12 @@
 
 const PHASE_LABELS = {
   queued: "En cola",
-  metadata: "Comprobando enlace",
-  download: "Descargando",
-  convert: "Preparando para Premiere",
-  finalize: "Importando",
-  cancelled: "Cancelado",
-  failed: "No se pudo completar",
+  metadata: "Checking link",
+  download: "Downloading",
+  convert: "Preparing for Premiere",
+  finalize: "Importing",
+  cancelled: "Cancelled",
+  failed: "Could not complete",
 };
 
 function timeToSeconds(value) {
@@ -28,10 +28,10 @@ function buildJobPayload(form) {
   const url = form.url?.trim();
   const outputDirectory = form.outputDirectory?.trim();
   if (!url) {
-    throw new TypeError("Pega un enlace de YouTube.");
+    throw new TypeError("Paste a YouTube link.");
   }
   if (!outputDirectory) {
-    throw new TypeError("Elige una carpeta de destino.");
+    throw new TypeError("Choose an output folder.");
   }
 
   const payload = {
@@ -45,15 +45,15 @@ function buildJobPayload(form) {
     const startTime = form.startTime?.trim();
     const endTime = form.endTime?.trim();
     if (!startTime || !endTime) {
-      throw new TypeError("Indica el tiempo de inicio y final.");
+      throw new TypeError("Enter both start and end times.");
     }
     const startSeconds = timeToSeconds(startTime);
     const endSeconds = timeToSeconds(endTime);
     if (startSeconds === null || endSeconds === null) {
-      throw new TypeError("Usa segundos, MM:SS o HH:MM:SS.");
+      throw new TypeError("Use seconds, MM:SS, or HH:MM:SS.");
     }
     if (endSeconds <= startSeconds) {
-      throw new RangeError("El final debe ser posterior al inicio.");
+      throw new RangeError("The end time must be after the start time.");
     }
     payload.startTime = startTime;
     payload.endTime = endTime;

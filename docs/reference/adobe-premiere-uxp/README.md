@@ -1,26 +1,26 @@
-# Referencia oficial de Adobe Premiere UXP
+# Official Adobe Premiere UXP Reference
 
-ClipDrop se contrastó con la documentación y los ejemplos oficiales de Adobe
-el 23 de julio de 2026. El repositorio no conserva copias completas de esas
-fuentes para evitar duplicación, peso y documentación desactualizada.
+ClipDrop was checked against Adobe's official documentation and samples on
+July 23, 2026. This repository does not keep full copies of those sources,
+avoiding duplication, repository weight, and stale documentation.
 
-## Fuentes
+## Sources
 
 - [Premiere UXP API](https://developer.adobe.com/premiere-pro/uxp/)
-- [Primer plugin UXP](https://developer.adobe.com/premiere-pro/uxp/plugins/)
-- [Manifiesto UXP](https://developer.adobe.com/premiere-pro/uxp/plugins/concepts/manifest/)
-- [WebView UXP](https://developer.adobe.com/premiere-pro/uxp/uxp-api/reference-js/global-members/html-elements/html-web-view-element)
-- [Empaquetar un plugin](https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/)
-- [Instalar un plugin](https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/install/)
-- [Ejemplos oficiales](https://github.com/AdobeDocs/uxp-premiere-pro-samples)
+- [Your first UXP plugin](https://developer.adobe.com/premiere-pro/uxp/plugins/)
+- [UXP manifest](https://developer.adobe.com/premiere-pro/uxp/plugins/concepts/manifest/)
+- [UXP WebView](https://developer.adobe.com/premiere-pro/uxp/uxp-api/reference-js/global-members/html-elements/html-web-view-element)
+- [Package a plugin](https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/package/)
+- [Install a plugin](https://developer.adobe.com/premiere-pro/uxp/plugins/distribution/install/)
+- [Official samples](https://github.com/AdobeDocs/uxp-premiere-pro-samples)
 
-## Patrones aplicados
+## Applied Patterns
 
-- Manifiesto v5 con host `premierepro`.
-- Permisos de red y WebView limitados por dominio.
-- `Project.importFiles()` para importar resultados.
-- `project.lockedAccess()` y transacciones para crear el bin.
-- WebView local con puente de mensajes para el preview.
+- Manifest v5 with the `premierepro` host.
+- Domain-scoped network and WebView permissions.
+- `Project.importFiles()` for importing output.
+- `project.lockedAccess()` and transactions for bin creation.
+- Local WebView with a message bridge for preview.
 
-Antes de cada lanzamiento público se deben revisar nuevamente el manifiesto,
-los permisos y las guías de distribución.
+Review the manifest, permissions, and distribution guidance again before every
+public release.

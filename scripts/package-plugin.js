@@ -40,10 +40,10 @@ function packagePlugin() {
     stdio: "inherit",
   });
   if (result.error) {
-    throw new Error(`No se pudo ejecutar zip: ${result.error.message}`);
+    throw new Error(`Could not run zip: ${result.error.message}`);
   }
   if (result.status !== 0) {
-    throw new Error(`zip terminó con código ${result.status}.`);
+    throw new Error(`zip exited with code ${result.status}.`);
   }
   return outputPath;
 }

@@ -11,7 +11,7 @@ const EVENT_TYPES = new Set(["ready", "metadata", "time", "ended", "error"]);
 
 function createPreviewCommand(type, payload = {}) {
   if (!COMMAND_TYPES.has(type)) {
-    throw new TypeError("Comando de preview no válido.");
+    throw new TypeError("Invalid preview command.");
   }
   return { version: 1, type, ...payload };
 }
@@ -60,7 +60,7 @@ function parsePreviewEvent(value) {
       version: 1,
       type: value.type,
       code: value.code ?? null,
-      message: String(value.message || "No se pudo cargar el preview."),
+      message: String(value.message || "The preview could not be loaded."),
     };
   }
   return { version: 1, type: value.type };

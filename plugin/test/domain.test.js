@@ -42,10 +42,10 @@ test("buildJobPayload includes both times for a segment", () => {
 });
 
 test("buildJobPayload rejects incomplete forms", () => {
-  assert.throws(() => buildJobPayload({ ...form, url: "" }), /enlace/i);
+  assert.throws(() => buildJobPayload({ ...form, url: "" }), /link/i);
   assert.throws(
     () => buildJobPayload({ ...form, outputDirectory: "" }),
-    /carpeta/i,
+    /folder/i,
   );
   assert.throws(
     () =>
@@ -55,7 +55,7 @@ test("buildJobPayload rejects incomplete forms", () => {
         startTime: "10",
         endTime: "",
       }),
-    /inicio y final/i,
+    /start and end/i,
   );
 });
 
@@ -68,12 +68,12 @@ test("buildJobPayload rejects a reversed segment", () => {
         startTime: "01:00",
         endTime: "00:30",
       }),
-    /posterior/i,
+    /after/i,
   );
 });
 
 test("phaseLabel translates helper phases for the editor", () => {
-  assert.equal(phaseLabel("download"), "Descargando");
-  assert.equal(phaseLabel("convert"), "Preparando para Premiere");
+  assert.equal(phaseLabel("download"), "Downloading");
+  assert.equal(phaseLabel("convert"), "Preparing for Premiere");
   assert.equal(phaseLabel("unknown"), "Procesando");
 });

@@ -70,4 +70,25 @@ function phaseLabel(phase) {
   return PHASE_LABELS[phase] || "Working";
 }
 
-module.exports = { buildJobPayload, phaseLabel, timeToSeconds };
+// Given the absolute path of the open Premiere project file, return a sibling
+// "downloads" directory next to it, preserving the platform's path separator.
+// Returns null when the project has no usable path (for example unsaved), so
+// the panel can fall back to a manual folder choice.
+function deriveDownloadsDir(projectPath) {
+  if (typeof projectPath !== "string" || projectPath.trim() === "") {
+    return null;
+  }
+  const normalized = projectPath.trim();
+  const lastSeparator = Math.max(
+    normalized.lastIndexOf("/"),
+    normalized.lastIndexOf("\\"),
+  );
+  if (lastSeparator < 0) {
+    return null;
+  }
+  const parent = normalized.slice(0, lastSeparator);
+  const separator = normalized[lastSeparator];
+  return `${parent}${separator}downloads`;
+}
+
+module.exports = { buildJobPayload, phaseLabel, timeToSeconds, deriveDownloadsDir };

@@ -4,7 +4,10 @@ const { entrypoints, storage } = require("uxp");
 const premiere = require("premierepro");
 const { buildJobPayload, phaseLabel, timeToSeconds } = require("./src/domain");
 const { HelperClient } = require("./src/helper-client");
-const { importIntoPremiere } = require("./src/premiere");
+const {
+  importIntoPremiere,
+  getProjectDownloadsDirectory,
+} = require("./src/premiere");
 const { ClipDropController } = require("./src/controller");
 const { parseYouTubeVideoId } = require("./src/youtube");
 const { SelectionModel, formatTimecode } = require("./src/selection");
@@ -20,6 +23,8 @@ let controller;
 let previewReady = false;
 let previewVideoId = null;
 let previewPlayerState = -1;
+let userChoseFolder = false;
+let healthTimer = null;
 const selection = new SelectionModel(0);
 
 function setGroupSelection(buttons, selected) {
@@ -243,6 +248,49 @@ async function chooseOutputFolder() {
   const nativePath = storage.localFileSystem.getNativePath(folder);
   document.getElementById("output-folder").value = nativePath;
   localStorage.setItem("clipdrop.outputDirectory", nativePath);
+  userChoseFolder = true;
+}
+
+// By default ClipDrop saves into a "downloads" folder next to the open project.
+// A manual choice wins for the session; an unsaved project falls back to the
+// last chosen folder, or leaves the picker empty.
+async function applyDefaultOutputFolder() {
+  if (userChoseFolder) {
+    return;
+  }
+  const field = document.getElementById("output-folder");
+  let projectDownloads = null;
+  try {
+    projectDownloads = await getProjectDownloadsDirectory(premiere);
+  } catch {
+    projectDownloads = null;
+  }
+  if (projectDownloads) {
+    field.value = projectDownloads;
+    return;
+  }
+  if (!field.value) {
+    const saved = localStorage.getItem("clipdrop.outputDirectory");
+    if (saved) {
+      field.value = saved;
+    }
+  }
+}
+
+function startHealthWatch() {
+  clearInterval(healthTimer);
+  const tick = () =>
+    controller
+      .checkHealth()
+      .then((health) => {
+        if (health && health.ready) {
+          clearInterval(healthTimer);
+          healthTimer = null;
+        }
+      })
+      .catch(() => {});
+  tick();
+  healthTimer = setInterval(tick, 3000);
 }
 
 function submitJob() {
@@ -372,10 +420,7 @@ function initialize() {
     });
   });
 
-  const savedFolder = localStorage.getItem("clipdrop.outputDirectory");
-  if (savedFolder) {
-    document.getElementById("output-folder").value = savedFolder;
-  }
+  applyDefaultOutputFolder().catch(() => {});
 
   const qualitySelect = document.getElementById("quality-select");
   const savedQuality = localStorage.getItem("clipdrop.quality");
@@ -409,7 +454,7 @@ function initialize() {
   });
   bindControl(document.getElementById("import-button"), submitJob);
 
-  controller.checkHealth().catch(() => {});
+  startHealthWatch();
   renderSelection();
 }
 
@@ -422,7 +467,10 @@ entrypoints.setup({
         initialize();
       },
       show() {
-        controller?.checkHealth().catch(() => {});
+        if (controller) {
+          startHealthWatch();
+          applyDefaultOutputFolder().catch(() => {});
+        }
       },
     },
   },

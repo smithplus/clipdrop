@@ -2,7 +2,7 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { buildJobPayload, phaseLabel } = require("../src/domain");
+const { buildJobPayload, phaseLabel, deriveDownloadsDir } = require("../src/domain");
 
 const form = {
   url: "https://youtu.be/dQw4w9WgXcQ",
@@ -84,6 +84,23 @@ test("buildJobPayload rejects a reversed segment", () => {
       }),
     /after/i,
   );
+});
+
+test("deriveDownloadsDir places downloads next to the project file", () => {
+  assert.equal(
+    deriveDownloadsDir("/Users/editor/Movies/VR Skyrim/project.prproj"),
+    "/Users/editor/Movies/VR Skyrim/downloads",
+  );
+  assert.equal(
+    deriveDownloadsDir("C:\\Users\\Editor\\Videos\\project.prproj"),
+    "C:\\Users\\Editor\\Videos\\downloads",
+  );
+});
+
+test("deriveDownloadsDir returns null for unsaved or pathless projects", () => {
+  assert.equal(deriveDownloadsDir(""), null);
+  assert.equal(deriveDownloadsDir(null), null);
+  assert.equal(deriveDownloadsDir("project.prproj"), null);
 });
 
 test("phaseLabel translates helper phases for the editor", () => {

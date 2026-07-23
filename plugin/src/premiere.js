@@ -1,6 +1,33 @@
 "use strict";
 
+const { deriveDownloadsDir } = require("./domain");
+
 const IMPORT_BIN_NAME = "ClipDrop Imports";
+
+async function getActiveProjectPath(premiere) {
+  const project = await premiere.Project.getActiveProject();
+  if (!project) {
+    return null;
+  }
+  if (typeof project.path === "string" && project.path) {
+    return project.path;
+  }
+  if (typeof project.getPath === "function") {
+    return (await project.getPath()) || null;
+  }
+  return null;
+}
+
+// The default output destination: a "downloads" folder beside the open
+// project file. Returns null when the project is unsaved, so the panel keeps
+// the manual folder picker as the fallback.
+async function getProjectDownloadsDirectory(premiere) {
+  try {
+    return deriveDownloadsDir(await getActiveProjectPath(premiere));
+  } catch {
+    return null;
+  }
+}
 
 async function findBin(root) {
   const items = await root.getItems();
@@ -45,4 +72,10 @@ async function importIntoPremiere(premiere, filePath) {
   }
 }
 
-module.exports = { importIntoPremiere, getOrCreateImportBin, IMPORT_BIN_NAME };
+module.exports = {
+  importIntoPremiere,
+  getOrCreateImportBin,
+  getActiveProjectPath,
+  getProjectDownloadsDirectory,
+  IMPORT_BIN_NAME,
+};

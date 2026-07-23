@@ -4,7 +4,7 @@ ClipDrop is a UXP extension for Adobe Premiere Pro that lets editors preview
 authorized YouTube media, mark In and Out points, download only the selected
 segment, and import it into the open project.
 
-> Status: `0.4.0` is a locally validated macOS Apple Silicon release. The
+> Status: `0.4.1` is a locally validated macOS Apple Silicon release. The
 > ClipDrop menu bar app includes its media engine, yt-dlp, ffmpeg, ffprobe, and
 > the Premiere panel. Users do not need Node.js, Homebrew, or a manually started
 > service. A Windows installer is the next distribution target.
@@ -22,7 +22,7 @@ segment, and import it into the open project.
 
 ## Install on macOS
 
-1. Download `ClipDrop-0.4.0-macOS-arm64.dmg`.
+1. Download `ClipDrop-0.4.1-macOS-arm64.dmg`.
 2. Drag `ClipDrop` to Applications and open it once.
 3. Keep `Launch at Login` enabled in the ClipDrop menu bar menu.
 4. Open Premiere Pro 25.6 or later.

@@ -1,5 +1,8 @@
 "use strict";
 
+const { createPlayerVars, playerErrorMessage } =
+  window.ClipDropPreviewConfig;
+
 let player = null;
 let pendingLoad = null;
 let timeTimer = null;
@@ -90,12 +93,7 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     width: "100%",
     height: "100%",
-    playerVars: {
-      autoplay: 0,
-      controls: 1,
-      playsinline: 1,
-      rel: 0,
-    },
+    playerVars: createPlayerVars(),
     events: {
       onReady() {
         send("ready");
@@ -109,9 +107,10 @@ window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
         sendTime();
       },
       onError(event) {
+        clearInterval(metadataTimer);
         send("error", {
           code: event.data,
-          message: "YouTube does not allow this video to play here.",
+          message: playerErrorMessage(event.data),
         });
       },
     },

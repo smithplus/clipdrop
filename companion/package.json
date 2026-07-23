@@ -1,6 +1,6 @@
 {
   "name": "clipdrop-companion",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "description": "ClipDrop menu bar app for Adobe Premiere Pro.",
   "main": "src/main.js",
@@ -45,7 +45,7 @@
         "to": "package.json"
       },
       {
-        "from": "../dist/ClipDrop-0.4.0.ccx",
+        "from": "../dist/ClipDrop-0.4.1.ccx",
         "to": "installer/ClipDrop.ccx"
       },
       {
